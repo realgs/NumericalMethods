@@ -1,11 +1,11 @@
-def BubbleSort(dane):
-    n = len(dane)
+def BubbleSort(tablica):
+    n = len(tablica)
     while n > 1:
         for i in range(n-1):
-            if dane[i] > dane[i+1]:
-                dane[i], dane[i+1] = dane[i+1], dane[i]
+            if tablica[i] > tablica[i+1]:
+                tablica[i], tablica[i+1] = tablica[i+1], tablica[i]
         n -= 1
-    return dane
+    return tablica
 
 def QuickSort(tablica):
 
