@@ -27,4 +27,12 @@ def quick_sort(array, left, right):
         index = partition(array, left, right)
         quick_sort(array, left, index - 1)
         quick_sort(array, index + 1, right)
-  
+
+
+if __name__ == "__main__":
+    test = np.array([7, 5, 8, 4, 2, 7, 9, 0, 1, ])
+    kopia = test[:]
+    quick_sort(kopia, 0, len(test) - 1)
+    print('Bubble sort:', bubble_sort(test))
+    print('Quick sort: ', kopia)
+    print('Tablica:    ', test)
