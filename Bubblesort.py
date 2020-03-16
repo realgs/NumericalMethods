@@ -18,3 +18,12 @@ def bubble_sort(tab):
             j-=1
     return tab
 
+def main(size,start,stop):
+    unsorted_tab=create_tab(size,start,stop)
+    print('Before sorting: ',unsorted_tab)
+    sorted_tab=bubble_sort(unsorted_tab)
+    print('After sorting: ',sorted_tab)
+
+main(10,1,10)
+
+
