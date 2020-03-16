@@ -9,7 +9,7 @@ def swap(a,i,j):
     a[i] = a[j]
     a[j] = zp    
 
-a= [1,9,6,3,4,5]
+a = [8,1,9,6,3,4,5]
  
 def sort (a):
     n = len(a)
@@ -19,5 +19,4 @@ def sort (a):
             if a[i] > a[i+1]:
                 swap(a,i,i+1)
 sort(a)
-
 print(a)
