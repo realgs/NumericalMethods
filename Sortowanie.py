@@ -25,3 +25,10 @@ def QuickSort(tablica):
         return QuickSort(mniejsze) + rowne + QuickSort(wieksze)
     else:
         return tablica
+
+liczby = [-2324, 1, 3, 543, -1, 0, 5, 124, 12412, 0]
+tablica = liczby.copy()
+
+print(BubbleSort(tablica))
+print(QuickSort(tablica))
+
