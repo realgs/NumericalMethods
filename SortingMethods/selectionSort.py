@@ -11,4 +11,6 @@ numbers = [10, 55, 2, 6, 7, 22, 101]
 
 print(numbers)
 
-print(selectionSort(numbers))
+sortedNumbers = selectionSort(numbers)
+
+print(sortedNumbers)
