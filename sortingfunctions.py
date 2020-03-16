@@ -2,12 +2,10 @@ import numpy as np
 
 
 def bubble_sort(array):
-    length = len(array)
+    copy = array[:]
+    length = len(copy)
     for i in range(length):
         for j in range(0, length - i - 1):
-            if array[j] > array[j + 1]:
-                array[j], array[j + 1] = array[j + 1], array[j]
-    return array
-
-
-
+            if copy[j] > copy[j + 1]:
+                copy[j], copy[j + 1] = copy[j + 1], copy[j]
+    return copy
