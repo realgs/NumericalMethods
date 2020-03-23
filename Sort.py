@@ -22,3 +22,16 @@ if ros=="r":
             else:
                 m=m+1
     print("Tablica posortowana rosnąco:", tab)
+
+elif ros=="m":
+    for i in range(0,(len(tab))):
+        m=0
+        for i in range(0,(len(tab)-1)):
+            if tab[m]<tab[m+1]:
+                z=tab[m]
+                tab[m]=tab[m+1]
+                tab[m+1]=z
+                m=m+1
+            else:
+                m=m+1
+    print("Tablica posortowana malejąco:", tab)
