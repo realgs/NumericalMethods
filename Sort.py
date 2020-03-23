@@ -9,3 +9,16 @@ for i in range(0,ran.randint(0,40)):
 print("Nasza tablica:",tab)
 
 ros=str(input("Jeżeli chcesz posortować tablicę rosnąco napisz 'r', jeżeli chcesz posortować tablicę malejąco napisz 'm'"))
+
+if ros=="r":
+    for i in range(0,(len(tab))): 
+        m=0
+        for i in range(0,(len(tab)-1)):
+            if tab[m]>tab[m+1]:
+                z=tab[m]
+                tab[m]=tab[m+1]
+                tab[m+1]=z
+                m=m+1
+            else:
+                m=m+1
+    print("Tablica posortowana rosnąco:", tab)
