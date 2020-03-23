@@ -60,6 +60,7 @@ def IleCzasu(funkcja):
    czas = stop - start
    return czas
 
+
 def Porownanie():
     funkcje = [InsertSort, QuickSort, BubbleSort, SelectionSort]
     czasy = []
@@ -73,3 +74,8 @@ def Porownanie():
 
 liczby_testowe = random.sample(range(-10000, 10000), 15)
 tablica = liczby_testowe.copy()
+
+
+print('\nTablica przed sortowaniem:', tablica)
+print('\nNajszybszą z funkcji jest:', Porownanie()[0]+', a zadaną listę sortuje w czasie:', Porownanie()[1], 'sekund')
+print('\nTablica po sortowaniu:', tablica)
