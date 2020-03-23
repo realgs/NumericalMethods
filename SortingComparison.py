@@ -28,6 +28,31 @@ def bubble_sort(tab):
             j-=1
     return tab
 
+def quick_sort(tab):
+    smaller = []
+    equal = []
+    bigger = []
+    if len(tab) > 1:
+        pivot = tab[0]
+        for nb in tab:
+            if nb < pivot:
+                smaller.append(nb)
+            elif nb == pivot:
+                equal.append(nb)
+            else:
+                bigger.append(nb)
+        return quick_sort(smaller)+equal+quick_sort(bigger)
+    else:
+        return tab
+    
+def selection_sort(tab):
+    for i in range(len(tab)):
+        minimum = min(tab[i:]) 
+        min_index = tab[i:].index(minimum) 
+        tab[i + min_index] = tab[i] 
+        tab[i] = minimum                  
+    return tab
+
 
 
 
