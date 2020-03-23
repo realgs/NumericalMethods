@@ -23,10 +23,7 @@ if ros=="r":
                 m=m+1
     print("Tablica posortowana rosnąco:", tab)
 
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 elif ros=="m":
     for i in range(0,(len(tab))):
         m=0
@@ -38,7 +35,6 @@ elif ros=="m":
                 m=m+1
             else:
                 m=m+1
-<<<<<<< Updated upstream
     print("Tablica posortowana malejąco:", tab)
 
 
@@ -46,6 +42,13 @@ elif ros=="m":
 lista=[1,2,5,6,89,10,22,1,30,100,2]
 lista.sort()
 print(lista)
-=======
-    print("Tablica posortowana malejąco:", tab)
->>>>>>> Stashed changes
+
+data = [6,-1,8,10,4,50,2,0,100,34,2,3,4]
+def bubb_sort(data):
+    for i in range(len(data) - 1, 0, -1):
+        for j in range(i):
+            if data[j] > data[j + 1]:
+                data[j], data[j + 1] = data[j + 1], data[j]
+
+bubb_sort(data)
+print(data)
