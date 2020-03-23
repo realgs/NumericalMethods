@@ -1,4 +1,5 @@
 import random as ran
+import time
 print("Podaj z jakiego zakresu losujemy elementy do tabeli.")
 x=int(input("Losujemy od: "))
 y=int(input("Losujemy do: "))
@@ -9,7 +10,7 @@ for i in range(0,ran.randint(0,40)):
 print("Nasza tablica:",tab)
 
 ros=str(input("Jeżeli chcesz posortować tablicę rosnąco napisz 'r', jeżeli chcesz posortować tablicę malejąco napisz 'm'"))
-
+start = time.clock()
 if ros=="r":
     for i in range(0,(len(tab))): 
         m=0
@@ -21,8 +22,10 @@ if ros=="r":
                 m=m+1
             else:
                 m=m+1
+    end=time.clock()
+    total=end-start
     print("Tablica posortowana rosnąco:", tab)
-
+    print("{0:02f}s".format(total))
 
 elif ros=="m":
     for i in range(0,(len(tab))):
@@ -35,7 +38,11 @@ elif ros=="m":
                 m=m+1
             else:
                 m=m+1
+        end=time.clock()
+    total=end-start
     print("Tablica posortowana malejąco:", tab)
+    print("{0:02f}s".format(total))
+
 
 
 
