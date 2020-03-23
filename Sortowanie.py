@@ -1,5 +1,6 @@
 import random
 
+
 def BubbleSort(tablica):
     n = len(tablica)
     while n > 1:
@@ -8,6 +9,7 @@ def BubbleSort(tablica):
                 tablica[i], tablica[i+1] = tablica[i+1], tablica[i]
         n -= 1
     return tablica
+
 
 def QuickSort(tablica):
 
@@ -28,6 +30,7 @@ def QuickSort(tablica):
     else:
         return tablica
 
+
 def InsertSort(tablica):
     for i in range(1, len(tablica)):
         wstawiany = tablica[i]
@@ -39,6 +42,15 @@ def InsertSort(tablica):
     return tablica
 
 
+def SelectionSort(tablica):
+    for i in range(len(tablica)):
+        indeks_min = i
+        for j in range(i+1, len(tablica)):
+            if tablica[indeks_min] > tablica[j]:
+                indeks_min = j
+        tablica[i], tablica[indeks_min] = tablica[indeks_min], tablica[i]
+    return tablica
+
+
 liczby_testowe = random.sample(range(-10000, 10000), 15)
 tablica = liczby_testowe.copy()
-
