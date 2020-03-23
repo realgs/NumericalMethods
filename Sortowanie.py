@@ -60,7 +60,16 @@ def IleCzasu(funkcja):
    czas = stop - start
    return czas
 
+def Porownanie():
+    funkcje = [InsertSort, QuickSort, BubbleSort, SelectionSort]
+    czasy = []
+    for funkcja in funkcje:
+        czasy.append(IleCzasu(funkcja))
+
+    zestawienie = dict(zip(czasy, funkcje))
+    min_czas = min(zestawienie.keys())
+    return [zestawienie[min_czas].__name__, min_czas]
+
 
 liczby_testowe = random.sample(range(-10000, 10000), 15)
 tablica = liczby_testowe.copy()
-
