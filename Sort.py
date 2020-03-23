@@ -67,3 +67,14 @@ end= time.clock()
 total4=end-start
 print(data)
 print("{0:02f}s".format(total4))
+
+print(".................................................")
+if ros=="r":
+    print("time1-sortowanie rosnące: "+"{0:02f}s".format(total1))
+else:
+    print("time2-sortowanie malejące: "+"{0:02f}s".format(total2))
+print("time3-sortowanie listy: "+"{0:02f}s".format(total3))
+print("time4-bubb_sort: "+"{0:02f}s".format(total4))
+
+a=("time1-sortowanie rosnące: "+"{0:02f}s".format(total1),"time2-sortowanie malejące: "+"{0:02f}s".format(total2),"time3-sortowanie listy: "+"{0:02f}s".format(total3),"time4-bubb_sort: "+"{0:02f}s".format(total4))
+print("Najszybciej działa opcja: "+min(a))
