@@ -55,33 +55,21 @@ def insertion_sort(array):
     return array
 
 
-def time_count(function, tab):
+def comparison(function, tab):
     start = t.time()
     function(tab)
     stop = t.time()
     return stop - start, tab
 
 
-def comparision():
-    pass
-
 if __name__ == "__main__":
-    # quick = test.copy()
-    # quick_sort(quick, 0, len(test) - 1)
-    # bubble = bubble_sort(test.copy())
-    # insert = insertion_sort(test.copy())
-    # select = selection_sort(test.copy())
-    #
-    # print('Tablica do posortowania:', test)
-    # print('Bubble sort:', bubble)
-    # print('Quick sort: ', quick)
-    # print('Insertion sort:', insert)
-    # print('Selection sort:', select)
-    quick = comparision(quick_sort, test.copy())
-    bubble = comparision(bubble_sort, test.copy())
-    insertion = comparision(insertion_sort, test.copy())
-    selection = comparision(selection_sort, test.copy())
-    print('Czas quick sort:', quick[0])
-    print('Czas bubble sort:', bubble[0])
-    print('Czas insertion sort:', insertion[0])
-    print('Czas selection sort:', selection[0])
+    test = [12, 5, 4, 7, -5, -10, 12, 4, 8, 16, 15, 2]
+    quick = comparison(quick_sort, test.copy())
+    bubble = comparison(bubble_sort, test.copy())
+    insertion = comparison(insertion_sort, test.copy())
+    selection = comparison(selection_sort, test.copy())
+    print("Tablica przed posortowaniem: {}".format(test))
+    print('Czas quick sort:', quick[0],'\nTablica:',quick[1])
+    print('Czas bubble sort:', bubble[0],'\nTablica:',bubble[1])
+    print('Czas insertion sort:', insertion[0],'\nTablica:',insertion[1])
+    print('Czas selection sort:', selection[0],'\nTablica:',selection[1])
