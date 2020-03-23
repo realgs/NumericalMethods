@@ -1,4 +1,5 @@
 import random as rd
+import time
 
 def create_tab(size,start,stop):
     tab=[]
@@ -52,6 +53,24 @@ def selection_sort(tab):
         tab[i + min_index] = tab[i] 
         tab[i] = minimum                  
     return tab
+
+def count_time():
+    tab=create_tab(2000,1,10000)
+    functions=[insert_sort,bubble_sort,quick_sort,selection_sort]
+    function=['insert_sort','bubble_sort','quick_sort','selection_sort']
+    times={}
+    for i in range(len(functions)):
+        start=time.time()
+        functions[i](tab)  
+        stop=time.time()
+        czas=stop-start
+        times[function[i]]=czas
+    time_list=list(times.values()) 
+    min_time=min(time_list)
+    max_time=max(time_list)
+    return print('Czasy realizacji:\n',times,'\nCzas minimalny:',min_time,'\nCzas maksymalny:',max_time)
+     
+count_time()
 
 
 
