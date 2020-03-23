@@ -23,6 +23,7 @@ if ros=="r":
                 m=m+1
     print("Tablica posortowana rosnąco:", tab)
 
+
 elif ros=="m":
     for i in range(0,(len(tab))):
         m=0
