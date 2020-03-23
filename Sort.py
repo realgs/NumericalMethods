@@ -23,9 +23,9 @@ if ros=="r":
             else:
                 m=m+1
     end=time.clock()
-    total=end-start
+    total1=end-start
     print("Tablica posortowana rosnąco:", tab)
-    print("{0:02f}s".format(total))
+    print("{0:02f}s".format(total1))
 
 elif ros=="m":
     for i in range(0,(len(tab))):
@@ -39,9 +39,9 @@ elif ros=="m":
             else:
                 m=m+1
         end=time.clock()
-    total=end-start
+    total2=end-start
     print("Tablica posortowana malejąco:", tab)
-    print("{0:02f}s".format(total))
+    print("{0:02f}s".format(total2))
 
 
 
@@ -50,9 +50,9 @@ lista=[1,2,5,6,89,10,22,1,30,100,2]
 start=time.clock()
 lista.sort()
 end= time.clock()
-total=end-start
+total3=end-start
 print(lista)
-print("{0:02f}s".format(total))
+print("{0:02f}s".format(total3))
 
 data = [6,-1,8,10,4,50,2,0,100,34,2,3,4]
 start=time.clock()
@@ -64,6 +64,6 @@ def bubb_sort(data):
 
 bubb_sort(data)
 end= time.clock()
-total=end-start
+total4=end-start
 print(data)
-print("{0:02f}s".format(total))
+print("{0:02f}s".format(total4))
