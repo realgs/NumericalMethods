@@ -22,3 +22,30 @@ if ros=="r":
             else:
                 m=m+1
     print("Tablica posortowana rosnąco:", tab)
+
+<<<<<<< Updated upstream
+
+=======
+>>>>>>> Stashed changes
+elif ros=="m":
+    for i in range(0,(len(tab))):
+        m=0
+        for i in range(0,(len(tab)-1)):
+            if tab[m]<tab[m+1]:
+                z=tab[m]
+                tab[m]=tab[m+1]
+                tab[m+1]=z
+                m=m+1
+            else:
+                m=m+1
+<<<<<<< Updated upstream
+    print("Tablica posortowana malejąco:", tab)
+
+
+
+lista=[1,2,5,6,89,10,22,1,30,100,2]
+lista.sort()
+print(lista)
+=======
+    print("Tablica posortowana malejąco:", tab)
+>>>>>>> Stashed changes
