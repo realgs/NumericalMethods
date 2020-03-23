@@ -1,4 +1,5 @@
 import numpy as np
+import time as t
 
 
 def bubble_sort(array):
@@ -27,6 +28,13 @@ def quick_sort(array, left, right):
         index = partition(array, left, right)
         quick_sort(array, left, index - 1)
         quick_sort(array, index + 1, right)
+
+
+def comparision(function, tab):
+    start = t.time()
+    function(tab)
+    stop = t.time()
+    return stop - start
 
 
 if __name__ == "__main__":
