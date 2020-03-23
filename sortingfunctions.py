@@ -3,13 +3,16 @@ import time as t
 
 
 def bubble_sort(array):
-    copy = array[:]
-    length = len(copy)
+    length = len(array)
     for i in range(length):
         for j in range(0, length - i - 1):
-            if copy[j] > copy[j + 1]:
-                copy[j], copy[j + 1] = copy[j + 1], copy[j]
-    return copy
+            if array[j] > array[j + 1]:
+                array[j], array[j + 1] = array[j + 1], array[j]
+    return array
+
+
+def partition_sort(array):
+    pass
 
 
 def partition(array, left, right):
@@ -39,8 +42,8 @@ def comparision(function, tab):
 
 if __name__ == "__main__":
     test = np.array([7, 5, 8, 4, 2, 7, 9, 0, 1, ])
-    kopia = test[:]
-    quick_sort(kopia, 0, len(test) - 1)
-    print('Bubble sort:', bubble_sort(test))
+    kopia = test.copy()
+    quick_sort(kopia, 0, len(kopia) - 1)
+    print('Bubble sort:', bubble_sort(test.copy()))
     print('Quick sort: ', kopia)
     print('Tablica:    ', test)
