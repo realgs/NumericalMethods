@@ -47,10 +47,15 @@ elif ros=="m":
 
 
 lista=[1,2,5,6,89,10,22,1,30,100,2]
+start=time.clock()
 lista.sort()
+end= time.clock()
+total=end-start
 print(lista)
+print("{0:02f}s".format(total))
 
 data = [6,-1,8,10,4,50,2,0,100,34,2,3,4]
+start=time.clock()
 def bubb_sort(data):
     for i in range(len(data) - 1, 0, -1):
         for j in range(i):
@@ -58,4 +63,7 @@ def bubb_sort(data):
                 data[j], data[j + 1] = data[j + 1], data[j]
 
 bubb_sort(data)
+end= time.clock()
+total=end-start
 print(data)
+print("{0:02f}s".format(total))
