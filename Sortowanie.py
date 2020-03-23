@@ -1,4 +1,5 @@
 import random
+import time as t
 
 
 def BubbleSort(tablica):
@@ -52,5 +53,14 @@ def SelectionSort(tablica):
     return tablica
 
 
+def IleCzasu(funkcja):
+   start = t.time()
+   funkcja(tablica)
+   stop = t.time()
+   czas = stop - start
+   return czas
+
+
 liczby_testowe = random.sample(range(-10000, 10000), 15)
 tablica = liczby_testowe.copy()
+
