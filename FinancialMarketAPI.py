@@ -7,7 +7,7 @@ Created on Mon Mar 30 11:08:57 2020
 
 import requests as rq
 import json
-
+import time
 
 
 response = rq.get("https://bitbay.net/API/Public/BTC/orderbook.json")
@@ -33,6 +33,29 @@ def print_offers(response):
         
 print_offers(response)
     
+def offers_diff(response):    
+    x = json_to_str(response.json()) 
+    
+    y = json.loads(x) 
+    return  1 - (y['bids'][0][0] - y['asks'][0][0]) / y['asks'][0][0]
+
+
+def print_diff_every_5():    
+    response = rq.get("https://bitbay.net/API/Public/BTC/orderbook.json")
+    offers_diff(response)
+    
+    t1 = time.time()
+    t2 = time.time()
+    
+    
+    while (1<2):
+        t2 = time.time()
+        if t2-t1 >= 5:
+            t1 = t2
+            response = rq.get("https://bitbay.net/API/Public/BTC/orderbook.json")
+            print(offers_diff(response)) 
+
+print_diff_every_5()
 
 
 
