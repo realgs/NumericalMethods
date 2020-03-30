@@ -69,9 +69,6 @@ def insertionsort(data):
     return [nd, time]
 
 
-a = data(10, 100, 10)
-print('input data',a)
-
 def compare():
     names = ['bubblesort','shellSort','selectionSort','insertionsort']
     times = [bubblesort(a)[1],shellSort(a)[1],selectionSort(a)[1],insertionsort(a)[1]]
@@ -85,11 +82,8 @@ def compare():
     return [minimum,name_f,sorted_numbs]
 
 
+a = data(10, 100, 10)
+print('input data',a)
 print('output data',compare()[2],'\n')
 print('function called',compare()[1],'was the best')
 print('and did it in ',compare()[0],'s')
-
-
-
-
-
