@@ -15,11 +15,20 @@ def blockchain_ticker():
     r=rq.get("https://blockchain.info/ticker")
     return r.json()
 
-bitbay=bitbay_orders()
-bb_ticker=bitbay_ticker()
-bc_ticker=blockchain_ticker()
-
-
-
-
-
+def orderbook():
+    orders=bitbay_ordsers()
+    sale=orders["asks"]
+    buy=orders["bids"]
+    
+    n=0
+    m=0
+    
+    print("Sale:")
+    for i in range (10):
+        print(sale[n])
+        n+=1
+    
+    print("Buy:")
+    for i in range (10):
+        print(buy[m])
+        m+=1
