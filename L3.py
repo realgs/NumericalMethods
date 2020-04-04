@@ -32,3 +32,4 @@ def orderbook():
     for i in range (10):
         print(buy[m])
         m+=1
+orderbook()
