@@ -2,9 +2,11 @@ import requests as rq
 import time as t
 
 
-def connect_API(url, params, pprint=None):
+def connect_API(url, params, pprint=None,*args):
     waluta, kategoria = params
     url += '{}{}/{}.json'.format(waluta[0], waluta[1], kategoria)
+    if args:
+        url += '?since={}'.format(args)
     response = rq.get(url).json()
 
     if pprint:
