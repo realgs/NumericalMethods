@@ -2,14 +2,13 @@ import requests as rq
 import time as t
 
 
-def connect_API(url, params, pprint=None, *args):
+def connect_API(url, params, pprint=None, since=None, order=None):
     waluta, kategoria = params
     url += '{}{}/{}.json'.format(waluta[0], waluta[1], kategoria)
-    if args:
-        if len(args) == 1:
-            url += '?since={}'.format(args[0])
-        else:
-            url += '?sort={}'.format(args[1])
+    if since:
+        url += '?since={}'.format(since)
+    elif order:
+        url += '?sort={}'.format(order)
     response = rq.get(url).json()
 
     if pprint:
