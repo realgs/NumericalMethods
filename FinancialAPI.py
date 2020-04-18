@@ -2,11 +2,11 @@ import requests as rq
 import time as t
 
 
-def connect_API(url, params, pprint=None,*args):
+def connect_API(url, params, pprint=None, *args):
     waluta, kategoria = params
     url += '{}{}/{}.json'.format(waluta[0], waluta[1], kategoria)
     if args:
-        if len(args[0]):
+        if len(args) == 1:
             url += '?since={}'.format(args[0])
         else:
             url += '?sort={}'.format(args[1])
