@@ -1,6 +1,8 @@
 import requests 
 import json
+import numpy as np
 from datetime import datetime
+from scipy.signal import argrelextrema
 
 def return_data_json(obj):
     text = json.dumps(obj,sort_keys=(True), indent = 4)
@@ -37,13 +39,53 @@ def conv_date(dict_data):
     date_buy.reverse()
     return date_sell,date_buy
 
+def count_indicators(dict_data,converted_dates,atributes):
+    indicators_atribute_data={}
+    for j in range(len(atributes)):
+        indicators_type_data={}
+        for i in range(len(dict_data)):
+            trade_type=' SELL' if i==0 else ' BUY'
+            aver_val_date=converted_dates[i]
+            data_atribute=dict_data[i][atributes[j]]
+            sum_atribute=sum(data_atribute)
+            aver_val=sum_atribute/len(data_atribute)
+            array_aver_val=aver_val*np.array(len(data_atribute)*[1])
+            std_dev=np.std(data_atribute)
+            array_std_up=array_aver_val+std_dev
+            array_std_down=array_aver_val-std_dev
+            indicators_type_data[trade_type]=[aver_val_date,array_aver_val,array_std_up,array_std_down]
+        indicators_atribute_data[atributes[j]]=indicators_type_data
+    return indicators_atribute_data
+     
 
+def count_extremes(dict_data,converted_dates,atributes):
+    extremes_atribute_data={}
+    for j in range(len(atributes)):
+        extremes_type_data={}
+        for i in range(len(dict_data)):
+            trade_type=' SELL' if i==0 else ' BUY'
+            array_atribute=np.array(dict_data[i][atributes[j]])
+            index_max_atribute=argrelextrema(array_atribute, np.greater)[0]
+            index_min_atribute=argrelextrema(array_atribute, np.less)[0]
+            max_atribute=array_atribute[index_max_atribute]
+            min_atribute=array_atribute[index_min_atribute]
+            extremes=np.concatenate((min_atribute,max_atribute),axis=None)
+            index_extrema=np.concatenate((index_min_atribute,index_max_atribute),axis=None)
+            extremes_date=[]
+            for index in index_extrema:
+                ex_date=converted_dates[i][index]
+                extremes_date.append(ex_date)
+            extremes_type_data[trade_type]=[extremes_date,extremes]
+        extremes_atribute_data[atributes[j]]=extremes_type_data
+    return extremes_atribute_data
 
 def main(atributes):   
     response = requests.get("https://bitbay.net/API/Public/BTC/trades.json?sort=desc")
     if response.status_code==200:
         dict_data=dict_trades_data(response,['date']+atributes)
         converted_dates=conv_date(dict_data)
+        indicators_value=count_indicators(dict_data,converted_dates,atributes)
+        extremes_atribute_data=count_extremes(dict_data,converted_dates,atributes)
     else:
         print('Wystąpił błąd !')
 main(['price','amount'])
