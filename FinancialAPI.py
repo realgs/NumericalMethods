@@ -6,7 +6,10 @@ def connect_API(url, params, pprint=None,*args):
     waluta, kategoria = params
     url += '{}{}/{}.json'.format(waluta[0], waluta[1], kategoria)
     if args:
-        url += '?since={}'.format(args[0])
+        if len(args[0]):
+            url += '?since={}'.format(args[0])
+        else:
+            url += '?sort={}'.format(args[1])
     response = rq.get(url).json()
 
     if pprint:
