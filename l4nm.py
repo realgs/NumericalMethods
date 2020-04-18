@@ -69,7 +69,3 @@ def trades():
     show()
     
 trades()    
-    
-
-
-
