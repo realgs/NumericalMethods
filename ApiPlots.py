@@ -130,4 +130,4 @@ def main(atributes):
         print_plots(dict_data,converted_dates,atributes,extremes_atribute_data,indicators_value) 
     else:
         print('Wystąpił błąd !')
-main(('price','amount'))
+main(['price','amount'])
