@@ -3,6 +3,7 @@ import json
 import numpy as np
 from datetime import datetime
 from scipy.signal import argrelextrema
+import matplotlib.pyplot as plt
 
 def return_data_json(obj):
     text = json.dumps(obj,sort_keys=(True), indent = 4)
@@ -79,6 +80,25 @@ def count_extremes(dict_data,converted_dates,atributes):
         extremes_atribute_data[atributes[j]]=extremes_type_data
     return extremes_atribute_data
 
+def print_plots(dict_data,converted_dates,atributes,extrema_atribute_data,indicators_value):
+    for j in range(len(atributes)):
+        extrema_type_data=extrema_atribute_data[atributes[j]]
+        indicators_type_data=indicators_value[atributes[j]]
+        fig,ax=plt.subplots(len(dict_data),1,figsize=(26,15))
+        for i in range(len(dict_data)):
+            trade_type=' SELL' if i==0 else ' BUY'
+            extrema_data=extrema_type_data[trade_type]
+            indicators_data=indicators_type_data[trade_type]
+            ax[i].plot(converted_dates[i],dict_data[i][atributes[j]],'-o',label=atributes[j]+trade_type)
+            ax[i].plot(extrema_data[0],extrema_data[1],'o',color='black',label='extremes')
+            ax[i].plot(indicators_data[0],indicators_data[1],color='black',label='average value')
+            ax[i].plot(indicators_data[0],indicators_data[2],color='green',label='standard deviation')
+            ax[i].plot(indicators_data[0],indicators_data[3],color='green')
+            ax[i].set_title(atributes[j]+trade_type,size=25)
+            ax[i].set_xlabel('date',size=20)
+            ax[i].set_ylabel(atributes[j],size=20)
+            ax[i].legend(prop={'size': 15})
+
 def main(atributes):   
     response = requests.get("https://bitbay.net/API/Public/BTC/trades.json?sort=desc")
     if response.status_code==200:
@@ -86,6 +106,7 @@ def main(atributes):
         converted_dates=conv_date(dict_data)
         indicators_value=count_indicators(dict_data,converted_dates,atributes)
         extremes_atribute_data=count_extremes(dict_data,converted_dates,atributes)
+        print_plots(dict_data,converted_dates,atributes,extremes_atribute_data,indicators_value) 
     else:
         print('Wystąpił błąd !')
 main(['price','amount'])
