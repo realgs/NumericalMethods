@@ -1,39 +1,4 @@
 import requests
-
-
-"""
-print('Bids: ')
-for i in response.json()['bids']:
-    print(i)
-
-print('Asks: ')
-for i in response.json()['asks']:
-    print(i)
-
-
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-from itertools import count
-
-x_vals=[]
-y_vals=[]
-y2_vals=[]
-
-index=count()
-def animate(i):
-    response = requests.get('https://bitbay.net/API/Public/BTCUSD/ticker.json')
-    x_vals.append(next(index))
-    y_vals.append(response.json()['bid'])
-    y2_vals.append(response.json()['ask'])
-    plt.cla()
-    plt.plot(x_vals, y_vals)
-    plt.plot(x_vals, y2_vals)
-
-ani = FuncAnimation(plt.gcf(), animate,1000)
-
-plt.tight_layout()
-plt.show()
-"""
 import matplotlib.pyplot as plt
 import time
 from matplotlib.animation import FuncAnimation
