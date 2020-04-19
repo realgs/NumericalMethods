@@ -22,6 +22,8 @@ def dict_trades_data(response,atributes):
             atribute_list=(atribute_list_sell if to_dict[i]['type']=='sell' else atribute_list_buy)
             data=to_dict[i][atributes[j]]
             atribute_list.append(data)
+        atribute_list_sell.reverse()
+        atribute_list_buy.reverse()
         dict_data_sell[atributes[j]]=atribute_list_sell
         dict_data_buy[atributes[j]]=atribute_list_buy
     return dict_data
@@ -37,8 +39,6 @@ def conv_date(dict_data):
     for i in range(len(date_buy)):
         conv_date_buy=datetime.fromtimestamp(date_buy[i])
         date_buy[i]=conv_date_buy.strftime("%d %b %Y \n %H:%M")
-    date_sell.reverse()   
-    date_buy.reverse()
     return date_sell,date_buy
 
 
@@ -112,7 +112,7 @@ def print_plots(dict_data,converted_dates,atributes,extrema_atribute_data,indica
             plt.plot(indicators_data[0],indicators_data[5],'-o',color='purple',label='time_growth')
             plt.plot(extremes_data[0],extremes_data[1],'o',color='red',label='extremes')
             fig = plt.gcf()
-            fig.set_size_inches(20, 30)
+            fig.set_size_inches(20, 50)
             plt.title(atributes[j]+trade_type+' [USD]',size=20)
             plt.xlabel('date',size=15)
             plt.ylabel(atributes[j],size=15)
