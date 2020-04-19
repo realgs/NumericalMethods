@@ -1,0 +1,14 @@
+import time
+data = [9, 5, 7, 6, 6, 4, 3, 8, 1, 2]
+start = time.clock()
+def bubb_sort(data):
+    for i in range(len(data) - 1, 0, -1):
+        for j in range(i):
+            if data[j] > data[j + 1]:
+                data[j], data[j + 1] = data[j + 1], data[j]
+
+bubb_sort(data)
+end = time.clock()
+total = end - start
+print(data)
+print("{0:02f}s".format(total))
