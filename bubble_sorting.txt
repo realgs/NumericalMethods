@@ -1,0 +1,10 @@
+data = [9, 5, 7, 6, 6, 4, 3, 8, 1, 2]
+
+def bubb_sort(data):
+    for i in range(len(data) - 1, 0, -1):
+        for j in range(i):
+            if data[j] > data[j + 1]:
+                data[j], data[j + 1] = data[j + 1], data[j]
+
+bubb_sort(data)
+print(data)
