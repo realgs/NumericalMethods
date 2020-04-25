@@ -1,0 +1,6 @@
+1. Zbadać korelację wybranego wskaźnika związanego ze zmiennością waloru do wolumenu (czyli ilości kupionych/sprzedanych sztuk). 
+Przedział czasowy wybierzcie jaki uważacie za odpowiedni, proponuję dzienny. Wolumen to inaczej obrót w danym okresie, czyli to ile sztuk danego waloru zostało wymienionych.
+Korelację przedstawić w wybrany przez siebie sposób- na wykresie / czyste dane, procenty. Wasz wybór. Oprócz kodu, który ma to wyliczyć załączcie plik z wynikami i nazwijcie go correlation. 
+Nie ważne czy będzie plikiem tekstowym, csv, xlsx, czy obrazem z wykresem i nałożonymi na siebie informacjami. 
+Zadbajcie o to, by z wykonanego przez Was zadania jasno wynikała korelacja lub jej brak na wybranej parze walorów w wybranym okresie.
+(10pkt)
