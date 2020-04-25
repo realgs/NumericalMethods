@@ -22,15 +22,21 @@ def chart():
 
     currencies = ['BTC', 'USD']
     url = "https://bitbay.net/API/Public/"
-    nr = int(input('Podaj numer transakcji, od której chcesz rozpocząć wykres (mniejszy numer = więcej danych na wykresie): \nZaleca się min. 292759 (01.01.2020r.), gdyż mniejszy numer to dłuższy czas oczekiwania. Max numer: 303000\n'))
+    nr = (input('Podaj numer transakcji, od której chcesz rozpocząć wykres: \n Transakcja 292759 (01.01.2020r.)  Max nr transakcji: 303350\n Niższa wartość = dłuższy czas oczekiwania. \n'))
+
+    while nr.isnumeric() == False:
+        nr = input('Wprowadziłeś nieobsługiwany format (!=int lub input<0). Spróbuj ponownie. ')
+    if nr.isnumeric() == True:
+        while int(nr) > 303350:
+            nr = input('Wprowadziłeś za dużą wartość. Spróbuj ponownie. ')
+
     response = get_offers(url, currencies, False, category='trades', Id=nr)
+    last_id = response[-1]['tid']
 
     buys = []
     sells = []
     date_buys = []
     date_sells = []
-
-    last_id = response[-1]['tid']
 
     print('Pierwsza transakcja:', datetime.datetime.fromtimestamp(int(response[-1]['date'])).strftime('%Y-%m-%d %H:%M:%S'))
     print('\nPobieranie danych...\n')
@@ -53,7 +59,7 @@ def chart():
 
     print('Ostatnia transakcja:', datetime.datetime.fromtimestamp(date_buys[-1]).strftime('%Y-%m-%d %H:%M:%S'))
 
-    dif_b =[0]
+    dif_b = [0]
     dift_b = [0]
 
     for i in range(len(date_buys) - 1):
@@ -88,6 +94,7 @@ def chart():
         if dift_s[i] * dift_s[i+1] <= 0:
             extr_sells.append(sells[i])
             extr_date_sells.append(date_sells[i])
+
 
     plt.subplot(1, 2, 1)
     plt.plot(date_buys, buys, color='blue', label='Price')
