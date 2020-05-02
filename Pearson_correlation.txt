@@ -1,0 +1,2 @@
+Cearson correlation between price and amount sold for BTC is equal to :0.20278203591527813
+ Linear determination indicator :4.112055408994515 %
