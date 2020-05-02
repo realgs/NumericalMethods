@@ -22,8 +22,8 @@ def main():
     else:
         responses = load_data()
         responses = update(responses)
-    start = datetime.strptime('2020-05-01', '%Y-%m-%d')
-    end = datetime.strptime('2020-05-02', '%Y-%m-%d')
+    start = datetime.strptime('2020-04-01', '%Y-%m-%d')
+    end = datetime.strptime('2020-04-02', '%Y-%m-%d')
     Sell = ArrayMaker(responses, 'sell', start, end)
     Buy = ArrayMaker(responses, 'buy', start, end)
     # Pearson correlation coefficient for Sells
@@ -47,7 +47,9 @@ def main():
     ax[1].set_title("[Buy] Pearson correlation coefficient: {}".format(BuyPearson))
     ax[1].set_xlabel("Price [USD]")
     ax[1].set_ylabel("Amount")
+    plt.savefig('correlation coefficient.png')
     plt.show()
+
     return 0
 
 
