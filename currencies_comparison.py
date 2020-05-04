@@ -13,8 +13,8 @@ def return_data_json(obj):
 def get_data(currency , date_start):
     
     url_1 = 'https://rest.coinapi.io/v1/ohlcv/BITSTAMP_SPOT_'+currency+'_USD/history?period_id=1MTH&time_start='+date_start+'T00:00:00'
-    headers = {'X-CoinAPI-Key' : '412B09B9-BDA1-484C-852E-80305673E2A6'}
-    response = requests.get(url_1, headers=headers)
+    headers = {'X-CoinAPI-Key' : '.......API...KEY...........'}
+    response = requests.get(url_1 , headers=headers)
    
     text = return_data_json(response.json())
     text = json.loads(text)
@@ -94,6 +94,8 @@ def main():
     
     hossa_indicators.sort(reverse=True)
     bessa_indicators.sort(reverse=True)
+    
+    print(hossa_indicators,bessa_indicators)
     
     for key , value in currencies_indicators.items():
         if value[0] == hossa_indicators[0]:
