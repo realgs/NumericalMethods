@@ -12,53 +12,41 @@ def return_data_json(obj):
     return text
 
 
-def get_data():
-
-    date_start = input('Wprowadź datę początkową (format YYYY-MM-DD): ')
-    currencies = input('Wprowadź nazwy kryptowalut (np.BTC,LTC,ETH,XRP,BCH): ')
-    currencies = currencies.split(" ")
-    period=input('Wprowadź zakres (np.1SEC,1MIN,1HRS,1DAY,1MTH,1YRS): ')
+def get_data(response):
     
-    url_1 = 'https://rest.coinapi.io/v1/ohlcv/BITSTAMP_SPOT_' + currencies[0] + '_USD/history?period_id=' + period + '&time_start=' + date_start + 'T00:00:00'
-    url_2 = 'https://rest.coinapi.io/v1/ohlcv/BITSTAMP_SPOT_' + currencies[1] + '_USD/history?period_id=' + period + '&time_start=' + date_start + 'T00:00:00'
-    headers = {'X-CoinAPI-Key' : '412B09B9-BDA1-484C-852E-80305673E2A6'}
-    response_1 = requests.get(url_1, headers=headers)
-    response_2 = requests.get(url_2, headers=headers)
     
-    text_1 = return_data_json(response_1.json())
-    text_1 = json.loads(text_1)
-    text_2 = return_data_json(response_2.json())
-    text_2 = json.loads(text_2)
+    text = return_data_json(response.json())
+    text = json.loads(text)
 
-    return text_1,text_2,currencies
+    return text 
 
 
-def count_indicators(text_1,text_2):
+def get_value_volume(text):
 
-    volumes_traded_1 = np.zeros(len(text_1))
-    prices_1 = np.zeros(len(text_1))
+    volumes = np.zeros(len(text))
+    values = np.zeros(len(text))
     
-    for i in range(len(text_1)):
-        volumes_traded_1[i] = text_1[i]['volume_traded']
-        prices_1[i] = text_1[i]['price_close']
+    for i in range(len(text)):
+        volumes[i] = text[i]['volume_traded']
+        values[i] = text[i]['price_close']
         
-    volumes_traded_2 = np.zeros(len(text_2))
-    prices_2 = np.zeros(len(text_2))
+    return values , volumes
+
+
+def count_indicators(values):
     
-    for i in range(len(text_2)):
-        volumes_traded_2[i] = text_2[i]['volume_traded']
-        prices_2[i] = text_2[i]['price_close']
-        
-    indicators_1 = np.array(prices_1)/np.array(volumes_traded_1)
-    indicators_2 = np.array(prices_2)/np.array(volumes_traded_2)
+    indicators= np.zeros(len(values))
     
-    return indicators_1,indicators_2
+    for i in range(1,len(values)):
+        indicators[i] = (values[i] - values[i-1]) / values[i-1]
+    
+    return indicators
 
 
-def count_pearson(indicators_1,indicators_2):
+def count_pearson(volumes , indicators):
 
-    counter = len(indicators_1) * np.sum(indicators_1 * indicators_2) - np.sum(indicators_1) * np.sum(indicators_2)
-    denominator = math.sqrt((len(indicators_1) * np.sum(indicators_1*indicators_1) - (np.sum(indicators_1))**2) * (len(indicators_2) * np.sum(indicators_2 * indicators_2) - (np.sum(indicators_2))**2))
+    counter = len(volumes) * np.sum(volumes * indicators) - np.sum(volumes) * np.sum(indicators)
+    denominator = math.sqrt((len(volumes) * np.sum(volumes*volumes) - (np.sum(volumes))**2) * (len(indicators) * np.sum(indicators * indicators) - (np.sum(indicators))**2))
     
     r=counter/denominator
     
@@ -96,20 +84,35 @@ def correlation(r):
     return correlation
 
 
-def plot(indicators_1,indicators_2,str_correlation,currencies,r):
+def plot(volumes , indicators , str_correlation , r):
 
-    plt.plot(indicators_1, indicators_2, 'o')
+    plt.plot(volumes , indicators, 'o')
     plt.title(str_correlation + '\nWspółczynnik Pearsona: ' + str(round(r,2)))
-    plt.xlabel('wskaźnik ' + currencies[0])
-    plt.ylabel('wskaźnik ' + currencies[1])
+    plt.xlabel('Wolumen')
+    plt.ylabel('Wskaźnik waloru')
     plt.savefig('correlation.png')
     
     
 def main():
-    text=get_data()
-    indicators=count_indicators(text[0],text[1])
-    r=count_pearson(indicators[0],indicators[1])
-    str_correlation=correlation(r)
-    plot(indicators[0],indicators[1],str_correlation,text[2],r)
+    
+    date_start = input('Wprowadź datę początkową (format YYYY-MM-DD): ')
+    currency = input('Wprowadź nazwę kryptowaluty (np.BTC,LTC,ETH,XRP,BCH): ')
+    period = input('Wprowadź zakres (np.1SEC,1MIN,1HRS,1DAY,1MTH,1YRS): ')
+    
+    url = 'https://rest.coinapi.io/v1/ohlcv/BITSTAMP_SPOT_' + currency + '_USD/history?period_id=' + period + '&time_start=' + date_start + 'T00:00:00'                           
+    headers = {'X-CoinAPI-Key' : '.......API..KEY.........'}
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code == 200:
+        
+        text = get_data(response)
+        values , volumes = get_value_volume(text)
+        indicators = count_indicators(values)
+        r = count_pearson(volumes , indicators)
+        str_correlation = correlation(r)
+        plot(volumes , indicators , str_correlation , r)
+        
+    else:
+        print('Wystąpił błąd ' , response.status_code , '!')
     
 main()
