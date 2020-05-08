@@ -46,17 +46,46 @@ def download_markets(apikeys=None):
             download_markets(apikeys)
 
 
-def currency(dataframe, base, quote):
-    curr_market = dataframe[dataframe['asset_id_base'] == base]
-    curr_market = curr_market[curr_market['asset_id_quote'] == quote]
-    return curr_market
+def currency(dataframe, base=None, quote=None):
+    if base and quote:
+        curr_market = dataframe[dataframe['asset_id_base'] == base]
+        curr_market = curr_market[curr_market['asset_id_quote'] == quote]
+    elif base:
+        curr_market = dataframe[dataframe['asset_id_base'] == base]
+    elif quote:
+        curr_market = dataframe[dataframe['asset_id_quote'] == quote]
+    return curr_market.reset_index()
 
-#
-# if not os.path.exists('markets.json'):
-#     response = download_markets()
-# else:
-#     response = pd.read_json(r'markets.json', orient='records')
-# response.to_msgpack('responses.msg')
-# print(response['asset_id_base'].unique().shape)
+
+def currency_check(dataframe, base, quote):
+    if base not in dataframe['asset_id_base'].unique():
+        print("Nie ma takiej waluty bazowej!")
+        return 0
+    if quote not in dataframe['asset_id_quote'].unique():
+        print("Nie ma takiej waluty na którą chcesz wymienić w bazie!")
+        return 0
+    else:
+        markets = currency(dataframe, base)
+    if quote in markets['asset_id_quote'].unique():
+        return currency(markets, quote=quote)
+    elif quote not in markets['asset_id_quote'].unique():
+        print('Aby zamienić na twoją walutę docelową będzie potrzeba przewalutowania')
+        if 'USD' in markets['asset_id_quote'].unique():
+            markets = currency(markets, quote='USD')
+            markets = markets.append(currency(dataframe, base='USD', quote=quote),sort=True)
+            return markets
+        else:
+            print("Nie można zamienić")
+            return 0
+
+
+def bids(markets):
+    pass
+
+
+if not os.path.exists('markets.json'):
+    response = download_markets()
+else:
+    response = pd.read_json(r'markets.json', orient='records')
+print(currency_check(response, base='TUSD', quote='PLN')[['symbol_id', 'asset_id_base', 'asset_id_quote']])
 # print(response['asset_id_quote'].unique().shape)
-download_markets()
