@@ -1,0 +1,31 @@
+User Guide Wallet_app
+
+This application lets you store 4 different types of crypto currency in a digital wallet
+
+Supported types: Bitcoin - btc, Ethereum - eth, Litecoin - ltc, Ripple - trp
+
+Overview of available options:
+
+1. Add to wallet - Adds specified amount and type to the wallet (you have to type it in the bracket above)
+
+2. Change Value - Changes specified existing amount and type in your wallet (you have to type it in the bracket above)
+
+3. Upload last wallet - Uploads existing wallet from json file, it should be done automatically
+
+5. Wallet value in USD - Sums up your wallet (with current prices) and displays how much USD is your wallet worth and calculates how much your wallet would be worth 24 hours back then calculates and displays the difference. Also displays your current wallet
+
+4. Compare prices - Displays ratio of current price and price back from 24h
+
+5. Save your wallet - Saves your wallet, so when you run the program again, it can be uploaded
+
+6. Reset wallet - Resets your current wallet
+
+7. Show price change graph - Displays a graph showing how price varied over the last 24 hours (you must specify the type of cryptocurrency first)
+
+If you don't install the app with py2app, all files must be stored in the same folder
+
+
+
+
+
+
