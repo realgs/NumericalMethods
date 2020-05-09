@@ -1,0 +1,33 @@
+This program lets you create your own Cryptocurrency database and then lets you interact with it. 
+
+Quick star guide:
+
+1. Run the Main.py file. 
+
+2. You shouldn't worry about case sensitivity. It doesn't matter if you type btc or BTC. 
+
+3. Entering the resources is quite easy:
+
+	For example: Enter the name of the resource: BTC
+	       	     Enter the quantity of the resource: 0.1
+
+4. With Value Check after entering 4 you can specify the currency USD or EUR.
+
+5. Adding a resource works the same way as Entering does, but Entering wipes the CSV file.
+
+6. To delete you just type the name of the crypto. 
+
+7. Editing the quantity works similarly to Entering/Adding:
+
+	Your resources are: 
+	BTC 0.1
+
+	Which resource would you like to change? BTC
+	What's the new quantity? 0.7
+
+8. The 'resources.csv' file is the database of your cryptos. 
+
+9. You can type 'q' to exit of a mode, and when you are in the main menu 'q' closes the program.
+
+
+
