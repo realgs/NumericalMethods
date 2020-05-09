@@ -63,7 +63,7 @@ def currency_check(dataframe, base, quote):
         return 0
     elif quote not in dataframe['asset_id_quote'].unique():
         print("Nie ma takiej waluty na którą chcesz wymienić w bazie!")
-        return 0
+        return 1
     else:
         markets = currency(dataframe, base)
     if quote in markets['asset_id_quote'].unique():
@@ -76,7 +76,7 @@ def currency_check(dataframe, base, quote):
             return markets
         else:
             print("Nie można zamienić")
-            return 0
+            return 1
 
 
 def load_apikeys():
@@ -151,7 +151,6 @@ def exchange(df, currentsize, currentprice=0, markets_list=[], base='', quote=''
     argmax = df['price'].idxmax()
     maximum = df.loc[argmax, :]
     df = df.drop(df.index[argmax]).reset_index(drop=True)
-    print(maximum)
     currentprice += maximum['price'] * maximum['size']
     currentsize -= maximum['size']
     markets_list.append(maximum['symbol_id'][:maximum['symbol_id'].find('_')])
@@ -180,24 +179,76 @@ def load_markets():
         response = download_markets()
     else:
         response = pd.read_json(r'markets.json', orient='records')
-    return response
+    return response[response['symbol_type'] == 'SPOT']
 
 
 def load_user_data():
     if os.path.exists('user.json'):
-        with open('user.json', 'r') as f:
-            user = json.load(f)
+        user = pd.read_json(r'user.json', orient='records')
         return user
     else:
         return 0
 
 
-def wyb1(user):
-    user['']
-    pass
+def save_user(user):
+    user.to_json(r'user.json', orient='records')
+    print("Zapisano dane użytkownika")
+    return 0
 
 
-def wyb2():
+def wyb1(user, response):
+    temp = {}
+    temp['base'] = [input("Wprowadź kod waluty bazowej (np.BTC): ")]
+    temp['quote'] = [input("Wprowadź kod waluty docelowej (np.PLN): ")]
+    markets = currency_check(response, temp['base'][0], temp['quote'][0])
+    if type(markets) == int:
+        print("Wprowadzono nieprawidłową liczbę!")
+        confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
+        if confirm == 'q':
+            return 0
+        else:
+            wyb1(user, response)
+    temp['size'] = input("Wprowadź ilość waluty: ")
+    try:
+        temp['size'] = [float(temp['size'])]
+    except ValueError:
+        print("Wprowadzono nieprawidłową liczbę!")
+        confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
+        if confirm == 'q':
+            return 0
+        else:
+            wyb1(user, response)
+    if len(markets.index) > 30:
+        orderbook = download_orderbook(markets.sample(30))
+    else:
+        orderbook = download_orderbook(markets)
+    bids = orderbook[orderbook['type'] == 'bid'].reset_index(drop=True)
+    temp['current_val'], _, temp['market_l'] = exchange(bids, temp['size'][0], base=temp['base'][0], quote=bids['to'][0])
+    if bids['to'][0] != temp['quote']:
+        temp['current_val'] = [
+            estimate(temp['current_val'], temp['size'], bids['to'][0], temp['quote'], temp['market_l'])]
+    temp['init_val'] = input("Podaj wartość początkową (przy zakupie): ")
+    try:
+        temp['init_val'] = [float(temp['init_val'])]
+    except ValueError:
+        print("Wprowadzono nieprawidłowy typ danych!")
+        confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
+        if confirm == 'q':
+            return 0
+        else:
+            wyb1(user, response)
+    temp['now'] = [temp['current_val'][0][0] - temp['init_val'][0]]
+    temp['market_l'] = [temp['market_l']]
+    temp_df = pd.DataFrame.from_dict(temp)
+    if type(user) == int:
+        save_user(user)
+    else:
+        user.append(temp_df,ignore_index=True)
+        save_user(user)
+    return 0
+
+
+def wyb2(user):
     pass
 
 
@@ -280,25 +331,25 @@ def wyb7():
 def save_user_data():
     pass
 
-
-def main():
-    response = load_markets()
-    base = 'BTC'
-    quote = 'USD'
-    amount = 13.2837204820
-
-    markets = currency_check(response[response['symbol_type'] == 'SPOT'], base=base, quote=quote)
-    # print(markets)
-    if len(markets.index) > 30:
-        orderbook = download_orderbook(markets.sample(30))
-    else:
-        orderbook = download_orderbook(markets)
-
-    bids = orderbook[orderbook['type'] == 'bid'].reset_index(drop=True)
-    # if len(bids.index) == 0:
-
-    # print(bids)
-    print(exchange(bids, amount, base=base, quote=quote))
-    # print(response['asset_id_quote'].unique().shape)
-
-main()
+# def main():
+#     response = load_markets()
+#     base = 'BTC'
+#     quote = 'USD'
+#     amount = 13.2837204820
+#
+#     markets = currency_check(response, base=base, quote=quote)[['asset_id_base', 'asset_id_quote', 'symbol_id']]
+#     # print(markets)
+#     if len(markets.index) > 30:
+#         orderbook = download_orderbook(markets.sample(30))
+#     else:
+#         orderbook = download_orderbook(markets)
+#
+#     bids = orderbook[orderbook['type'] == 'bid'].reset_index(drop=True)
+#     # if len(bids.index) == 0:
+#
+#     print(bids)
+#     # print(exchange(bids, amount, base=base, quote=quote))
+#     # print(response['asset_id_quote'].unique().shape)
+#
+#
+# main()
