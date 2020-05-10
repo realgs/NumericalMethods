@@ -18,6 +18,18 @@ def show(user):
         print(newUser.rename(columns=col))
 
 
+def check_api(apikeys):
+    url = 'https://rest.coinapi.io/v1/exchangerate/BTC/USD?apikey={}'
+    flag = False
+    apikeys = [apikeys] if type(apikeys) != list else apikeys
+    for key in apikeys:
+        status = rq.get(url.format(key)).status_code
+        if status == 200:
+            flag = True
+            break
+    return flag
+
+
 def download_markets(apikeys=None):
     if not apikeys and os.path.exists('apikeys.pkl'):
         apikeys = load_apikeys()
@@ -40,6 +52,12 @@ def download_markets(apikeys=None):
         response.to_json(r'markets.json', orient='records')
         return pd.DataFrame(response)
     except ValueError:
+        if not check_api(apikeys):
+            key = input("Podaj prawidłowy klucz: ")
+            while not check_api(key):
+                key = input("Podaj prawidłowy klucz: ")
+            apikeys.extend(key)
+            apikeys = save_apikey(apikeys)
         if len(apikeys) > 1:
             apikeys.append(apikeys.pop(0))
             print("Zmiana klucza (obecny osiągnął limit)...")
@@ -115,6 +133,12 @@ def download_orderbook(markets):
     for index, row in markets[['symbol_id', 'asset_id_base', 'asset_id_quote']].iterrows():
         response = rq.get(url.format(row['symbol_id'], limit, apikeys[0]))
         if response.status_code == 429:
+            if not check_api(apikeys):
+                key = input("Podaj prawidłowy klucz: ")
+                while not check_api(key):
+                    key = input("Podaj prawidłowy klucz: ")
+                apikeys.extend(key)
+                apikeys = save_apikey(apikeys)
             print("Klucz się wyczerpał")
             apikeys.append(apikeys.pop(0))
             with open('apikeys.pkl', 'wb') as f:
@@ -174,6 +198,12 @@ def estimate(price, size, base, quote, market_lists):
     url = 'https://rest.coinapi.io/v1/exchangerate/{}/{}?apikey={}'.format(base, quote, apikeys[0])
     response = rq.get(url)
     if response.status_code == 429:
+        if not check_api(apikeys):
+            key = input("Podaj prawidłowy klucz: ")
+            while not check_api(key):
+                key = input("Podaj prawidłowy klucz: ")
+            apikeys.extend(key)
+            apikeys = save_apikey(apikeys)
         print("Klucz się wyczerpał")
         apikeys.append(apikeys.pop(0))
         with open('apikeys.pkl', 'wb') as f:
@@ -191,6 +221,12 @@ def estimate_foreign(size, base, quote, market_lists=[]):
     url = 'https://rest.coinapi.io/v1/exchangerate/{}/{}?apikey={}'.format(base, quote, apikeys[0])
     response = rq.get(url)
     if response.status_code == 429:
+        if not check_api(apikeys):
+            key = input("Podaj prawidłowy klucz: ")
+            while not check_api(key):
+                key = input("Podaj prawidłowy klucz: ")
+            apikeys.extend(key)
+            apikeys = save_apikey(apikeys)
         print("Klucz się wyczerpał")
         apikeys.append(apikeys.pop(0))
         with open('apikeys.pkl', 'wb') as f:
