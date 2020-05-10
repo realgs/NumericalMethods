@@ -2,7 +2,20 @@ import requests as rq
 import pandas as pd
 import os
 import pickle
-import json
+
+
+def show(user):
+    print()
+    if type(user) == int:
+        user = load_user_data()
+        if type(user) == int:
+            print("Baza jest pusta")
+            return 0
+    newUser = user[['base', 'quote', 'size', 'current_val', 'init_val', 'now']]
+    col = {'base': 'Wal. bazowa', 'quote': 'Wal. docelowa', 'size': 'Ilość', 'now': 'Zysk',
+           'init_val': 'Zapłacono', 'current_val': 'Obecna wartość'}
+    with pd.option_context('display.max_rows', None, 'display.max_columns', 6):
+        print(newUser.rename(columns=col))
 
 
 def download_markets(apikeys=None):
@@ -72,7 +85,6 @@ def currency_check(dataframe, base, quote):
         print('Aby zamienić na twoją walutę docelową będzie potrzeba przewalutowania')
         if 'USD' in markets['asset_id_quote'].unique():
             markets = currency(markets, quote='USD')
-            # markets = markets.append(currency(dataframe, base='USD', quote=quote), sort=True)
             return markets
         else:
             print("Nie można zamienić")
@@ -174,6 +186,22 @@ def estimate(price, size, base, quote, market_lists):
     return price, 0, market_lists
 
 
+def estimate_foreign(size, base, quote, market_lists=[]):
+    apikeys = load_apikeys()
+    url = 'https://rest.coinapi.io/v1/exchangerate/{}/{}?apikey={}'.format(base, quote, apikeys[0])
+    response = rq.get(url)
+    if response.status_code == 429:
+        print("Klucz się wyczerpał")
+        apikeys.append(apikeys.pop(0))
+        with open('apikeys.pkl', 'wb') as f:
+            pickle.dump(apikeys, f)
+        estimate_foreign(size, base, quote)
+    elif response.status_code == 200:
+        response = response.json()
+        price = response['rate'] * size
+        return price, market_lists
+
+
 def load_markets():
     if not os.path.exists('markets.json'):
         response = download_markets()
@@ -193,7 +221,7 @@ def load_user_data():
 def save_user(user):
     user.to_json(r'user.json', orient='records')
     print("Zapisano dane użytkownika")
-    return 0
+    return user
 
 
 def wyb1(user, response):
@@ -205,7 +233,7 @@ def wyb1(user, response):
         print("Wprowadzono nieprawidłową liczbę!")
         confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
         if confirm == 'q':
-            return 0
+            return user
         else:
             wyb1(user, response)
     temp['size'] = input("Wprowadź ilość waluty: ")
@@ -215,18 +243,20 @@ def wyb1(user, response):
         print("Wprowadzono nieprawidłową liczbę!")
         confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
         if confirm == 'q':
-            return 0
+            return user
         else:
             wyb1(user, response)
-    if len(markets.index) > 30:
-        orderbook = download_orderbook(markets.sample(30))
+    print("Trwa analiza najdroższej wyceny...")
+    if len(markets.index) > 10:
+        orderbook = download_orderbook(markets.sample(10))
     else:
         orderbook = download_orderbook(markets)
     bids = orderbook[orderbook['type'] == 'bid'].reset_index(drop=True)
-    temp['current_val'], _, temp['market_l'] = exchange(bids, temp['size'][0], base=temp['base'][0], quote=bids['to'][0])
-    if bids['to'][0] != temp['quote']:
-        temp['current_val'] = [
-            estimate(temp['current_val'], temp['size'], bids['to'][0], temp['quote'], temp['market_l'])]
+    temp['current_val'], _, temp['market_l'] = exchange(bids, temp['size'][0], base=temp['base'][0],
+                                                        quote=bids['to'][0])
+    if bids['to'][0] != temp['quote'][0]:
+        temp['current_val'], temp['market_l'] = estimate_foreign(temp['size'][0], bids['to'][0], temp['quote'][0],
+                                                                 temp['market_l'])
     temp['init_val'] = input("Podaj wartość początkową (przy zakupie): ")
     try:
         temp['init_val'] = [float(temp['init_val'])]
@@ -234,26 +264,129 @@ def wyb1(user, response):
         print("Wprowadzono nieprawidłowy typ danych!")
         confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
         if confirm == 'q':
-            return 0
+            return user
         else:
             wyb1(user, response)
-    temp['now'] = [temp['current_val'][0][0] - temp['init_val'][0]]
+    temp['current_val'] = [temp['current_val']]
+    temp['now'] = [temp['current_val'][0] - temp['init_val'][0]]
     temp['market_l'] = [temp['market_l']]
     temp_df = pd.DataFrame.from_dict(temp)
+    temp_df['size'] = temp_df['size'].astype('float64')
     if type(user) == int:
-        save_user(user)
+        save_user(temp_df)
+        return temp_df
     else:
-        user.append(temp_df,ignore_index=True)
+        user = user.append(temp_df, ignore_index=True)
+        user['size'] = user['size'].astype('float64')
         save_user(user)
-    return 0
+    return user
 
 
 def wyb2(user):
-    pass
+    if type(user) == int:
+        print("Baza pusta!")
+        user = load_user_data()
+        if type(user) == int:
+            return 0
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+        print(user[['base', 'quote', 'size', 'init_val']])
+    answer = input("Podaj index który chcesz edytować, jeśli chcesz przejść do trybu usuwania wierszy wprowadź 'e':")
+    if answer == 'e':
+        delete = input("Podaj index, który chcesz trwale usunąć:")
+        try:
+            delete = int(delete)
+        except ValueError:
+            print("Błędny input!")
+            confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
+            if confirm == 'q':
+                return user
+            else:
+                wyb2(user)
+        if delete < 0 or delete > len(user.index) - 1:
+            print("Wprowadzono błędny index")
+            confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
+            if confirm == 'q':
+                return user
+            else:
+                wyb2(user)
+        elif delete == 0 and len(user.index) == 1:
+            os.remove('apikeys.pkl')
+            print('Plik usunięty!')
+            return 0
+        else:
+            user = user.drop(user.index[delete])
+            save_user(user)
+            return user
+    else:
+        try:
+            row = int(answer)
+        except ValueError:
+            print("Błędny input!")
+            confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
+            if confirm == 'q':
+                return user
+            else:
+                wyb2(user)
+        if row < 0 or row > len(user.index) - 1:
+            print("Wprowadzono błędny index")
+            confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
+            if confirm == 'q':
+                return user
+            else:
+                wyb2(user)
+        else:
+            column = input("Podaj nazwę kolumny, której wartość chesz edytować 'size','init_val' : ")
+            if column in ['size', 'init_val']:
+                type_b = user[column].dtype
+                user.loc[row, column] = input("Wprowadź wartość w takiej samej formie jaka była!: ")
+                try:
+                    user[column] = user[column].astype(type_b)
+                except ValueError:
+                    print("Wprowadzono nie prawidłowy typ danych!")
+                    confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
+                    if confirm == 'q':
+                        return user
+                    else:
+                        wyb2(user)
+                save_user(user)
+                response = load_markets()
+                print("Uaktualniam bazę danych...")
+                wyb3(user, response)
+                return user
+            else:
+                print("Podanej kolumny nie można edytować!")
+                print("Wprowadzono nie prawidłowy typ danych!")
+                confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
+                if confirm == 'q':
+                    return user
+                else:
+                    wyb2(user)
 
 
-def wyb3():
-    pass
+def wyb3(user, response):
+    if type(user) == int:
+        print("Baza pusta!")
+        user = load_user_data()
+        if type(user) == int:
+            return 0
+    for index, row in user.iterrows():
+        base = row['base']
+        quote = row['quote']
+        size = row['size']
+        markets = currency_check(response, base, quote)
+        if len(markets.index) > 5:
+            orderbook = download_orderbook(markets.sample(5))
+        else:
+            orderbook = download_orderbook(markets)
+        bids = orderbook[orderbook['type'] == 'bid'].reset_index(drop=True)
+        current_val, _, market_l = exchange(bids, size, base=base, quote=quote)
+        if bids['to'][0] != quote:
+            current_val, market_l = estimate_foreign(size, bids['to'][0], quote, market_l)
+        now = current_val - row['init_val']
+        user.loc[index, 'current_val'] = current_val
+        user.loc[index, 'now'] = now
+    user = save_user(user)
+    return user
 
 
 def wyb4():
@@ -305,7 +438,7 @@ def wyb5():
                     return 0
                 else:
                     wyb5()
-            if 1 < answer > len(apikeys):
+            if 1 > answer or answer > len(apikeys):
                 print("Nie istnieje taki wiersz!")
                 confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
                 if confirm == 'q':
@@ -324,32 +457,35 @@ def wyb6():
     return download_markets()
 
 
-def wyb7():
-    pass
-
-
-def save_user_data():
-    pass
-
-# def main():
-#     response = load_markets()
-#     base = 'BTC'
-#     quote = 'USD'
-#     amount = 13.2837204820
-#
-#     markets = currency_check(response, base=base, quote=quote)[['asset_id_base', 'asset_id_quote', 'symbol_id']]
-#     # print(markets)
-#     if len(markets.index) > 30:
-#         orderbook = download_orderbook(markets.sample(30))
-#     else:
-#         orderbook = download_orderbook(markets)
-#
-#     bids = orderbook[orderbook['type'] == 'bid'].reset_index(drop=True)
-#     # if len(bids.index) == 0:
-#
-#     print(bids)
-#     # print(exchange(bids, amount, base=base, quote=quote))
-#     # print(response['asset_id_quote'].unique().shape)
-#
-#
-# main()
+def wyb7(user, response):
+    if type(user) == int:
+        user = load_user_data()
+        if type(user) == int:
+            print("Baza pusta!")
+    primary_quote = input("Wprowadź walutę docelową (np.PLN): ")
+    if primary_quote not in response['asset_id_quote'].unique():
+        if primary_quote not in response['asset_id_base'].unique():
+            print("Waluta nieobsługiwalna!")
+            confirm = input("Jeśli chcesz wrócić do menu wprowadź 'q'")
+            if confirm == 'q':
+                return 0
+            else:
+                wyb7(user, response)
+    value = 0
+    paid = 0
+    for index, row in user.iterrows():
+        base = row['base']
+        quote = row['quote']
+        size = row['size']
+        current_val = row['current_val']
+        init_val = row['init_val']
+        if quote == primary_quote:
+            value += current_val
+            paid += init_val
+            continue
+        else:
+            current_val, _ = estimate_foreign(current_val, quote, primary_quote)
+            init_val, _ = estimate_foreign(init_val, quote, primary_quote)
+            value += current_val
+            paid += init_val
+    return value, paid, primary_quote

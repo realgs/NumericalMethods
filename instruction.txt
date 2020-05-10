@@ -1,0 +1,8 @@
+1. Dane bazują na wpisanych inputach oraz plikach:
+    - markets.json - lista wszystkich możliwych marketów i kombinacji walut
+    - user.json - dane użytkownika
+    - apikeys.pkl - klucze (darmowe stworzone za pomocą 10maila) do API
+2. Program sobie poradzi bez żadnego z ww. plików - będzie wymuszał wpisywanie wszystkiego w inputach w konsoli
+3. Program może czasem "długo myśleć" - przetwarza on dużą bazę danych w celu wyliczenia jak najkorzystniejszej dla użytkownika wyceny - korzysta z wielu różnych marketów
+4. Należy postępować zgodnie z instrukcjami wyświetlanymi w konsoli
+5. Nie udało mi się znaleźć takiej pary walut których by nie wymienił (dodatkowo, jeśli np. zadamy mu obliczenie wartości TUSD -> PLN, nie ma takiego połączenia w API: program zamienia je domyślnie (informując użytkownika o przewalutowaniu) na TUSD -> USD, a następnie USD -> PLN)
