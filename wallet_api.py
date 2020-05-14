@@ -41,7 +41,7 @@ def main(response):
         else:
             confirm = input('Aby zamknąć wpisz "q":')
             if confirm == 'q':
-                c.save_user_data()
+                c.save_user(user)
                 return 0
 
 
