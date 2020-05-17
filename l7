@@ -1,6 +1,6 @@
 Stworzyć funkcję, która dla różnych zakresów czasu notowań z przeszłości wygeneruje symulację zachowania przyszłego dla wybranego waloru. 
 Funkcja przyjmuje argument wejściowy - datę "od"- w dowolnie wybranym przez was formacie, może być to string "2016-01-01" może być to pełny timestamp. 
-Symulacja ma być generowana od wprowadzonej daty do daty obecnej, na podstawie stworzonego przez was mini-modelu matematycznego. 
+Symulacja ma bazować na danych od wprowadzonej daty do daty obecnej. Na podstawie danych historycznych tworzycie model matematyczny i z niego generujecie dane dot. przyszłości. 
 Proponuję bazować model na obserwacji zachowania z przeszłości(dziennych wzrostów, spadków, ich wielkości i stosunku tych wartości). 
 Podpowiedź: policzyć prawdopodobieństwa wystąpienia zdarzeń (spadku/wzrostu) oraz ich wielkości (o ile % spadnie/wzrośnie) i na tej podstawie generować notowania przyszłe.
 Przeprowadzić pojedynczą oraz wielokrotną symulację, zapisać wyniki, policzyć wskaźniki grupy symulacji (takie jak średnia, mediana, odchylenia). 
