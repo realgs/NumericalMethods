@@ -1,0 +1,9 @@
+waluta = $
+każdą transakcję dodajemy osobno
+1. wybór waluty którą chcemy zrobić transakcje
+2. wpisanie ilości
+3. sell/buy
+
+zwraca nam stan naszego portfela i status
+jeżeli staus = 1, transakacja przebiegła pomyślnie
+jeżeli status = 0, brak środków lub brak waluty w portfelu lub coś wpisaliśmy niepoprawnie
