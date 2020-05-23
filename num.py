@@ -48,7 +48,7 @@ def predictions():
     else:
         print('Cena najprawdopodobniej wzrośnie.')
     
-    for i in range(30):
+    for i in range(100):
         price1=values()
         change1 = []
         for i in range(len(price1)-1):
@@ -56,7 +56,7 @@ def predictions():
 
         y = sum(change1)/len(change1)
         change_all.append(y)
-        t.sleep(1)
+        t.sleep(5)
         
     plot(change_all)
     show()
