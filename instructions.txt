@@ -1,4 +1,0 @@
-1.Niezbędne dane, zawierające zawartość poftfela znajdują się w pliku 'portfel.csv'
-2.Aby skorzystać z programu, należy wybrać bazową walutę,którą określa się poprzez input w konsoli
-3.Następnie należy postępować zgodnie z wyświetlanymi instrukcjami.
-4.Api zawiera krytptowaluty: BTC,LTC,ETH,XRP,BCH oraz waluty bazowe: EUR,USD.
