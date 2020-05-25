@@ -1,9 +1,0 @@
-1. Bazując na poprzednim zadaniu - znaleźć w API dane historyczne o przeprowadzonych transakcjach na wybranych walorach rynkowych. 
-Stworzyć funkcję rysującą podstawowe wykresy zmian na przestrzeni czasu. (5pkt)
-
-2. Wybrać 2 wskaźniki statystyczne skorelowane ze zmiennością cen (wielkość zmian, szybkość zmian). 
-Rozszerzyć funkcję z punktu 1 o dodatkowe 2 linie na wykresie reprezentujące właśnie te wskaźniki. Dodać legendę z nazwami serii danych. 
-(2.5pkt)
-
-3. Na wykresie znaleźć i nanieść punkty przełamania trendu ze wzrostowego na spadkowy i odwrotnie. 
-Matematycznie rzecz ujmując znaleźć lokalne minima i maksima na powyższych wykresach. (2.5pkt)
