@@ -26,6 +26,8 @@ def get_data(url , headers):
         for i in range(len(text)):
             prices.append(text[i]['price_close'])
             dates.append(text[i]['time_close'][:10])
+    elif response.status_code == 429:
+            print('Nieprawidłowy klucz api !!!')
     else:
         print('Wystąpił błąd' , response.status_code , '!')
     
@@ -34,8 +36,7 @@ def get_data(url , headers):
 
 def count_param():
     
-    normal = pd.DataFrame(np.random.normal(0 , 1 , 100))
-            
+    normal = pd.DataFrame(np.random.normal(1 , 1/3 , 100))
     param = abs(np.random.choice(normal[0]))
     
     return param
@@ -109,7 +110,7 @@ def print_statistics(average , standard_deviation , median_stat):
           , round(median_stat , 2))
     
 
-def single_simulation(prices , dates , base_currency):
+def single_simulation(prices):
     
     
     predicted_prices  = predict_prices(prices)
@@ -120,7 +121,7 @@ def single_simulation(prices , dates , base_currency):
     return predicted_prices
     
     
-def multiple_simulation(n , prices , dates , base_currency):
+def multiple_simulation(n , prices):
     
     predictions = []
     
@@ -180,8 +181,8 @@ def main():
     n = input('Podaj ilosc symulacji w wielokrotnej symulacji: ')
     
     prices , dates = get_data(url , headers)
-    predicted_prices = single_simulation(prices , dates , base_currency)
-    average_prices , predictions , statistics = multiple_simulation(n , prices , dates , base_currency)
+    predicted_prices = single_simulation(prices)
+    average_prices , predictions , statistics = multiple_simulation(n , prices)
     new_dates = create_dates(dates)
     print_plot(prices , predicted_prices , average_prices , dates , new_dates , base_currency)
     
