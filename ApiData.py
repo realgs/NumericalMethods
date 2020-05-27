@@ -31,6 +31,7 @@ def count_difference(response):
 def difference_every_5s(response):    
 
     t0 = time.time()
+    print('SELL-BUY DIFFFERENCE:',count_difference(response))
     
     while True:
         t = time.time()
