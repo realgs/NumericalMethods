@@ -2,33 +2,48 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import prediction_from_probability as pfp
 import numpy as np
+import datetime
+import os
+import warnings
+
+warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
     date = '2019-05-01'
-    end = '2020-02-01'
+    end = '2020-03-01'
+    if os.path.exists("data.json"):
+        df = pd.read_json('data.json', orient='columns', convert_dates=['time_close', 'time_open'])
 
-    df = pfp.download_data(date, peroid='1HRS')
-    df, prediction_data = pfp.extend_df(df, date, peroid='1HRS')
+    else:
+        df = pfp.download_data(date, end, peroid='1HRS')
+        df.to_json('data.json', orient='columns')
     predictionmean = pd.DataFrame(columns=['price_close', 'time_close'])
+    split_index = df.loc[df['time_open'] == datetime.datetime(2019, 10, 1)].index[0]
+    learning_set = df.iloc[:split_index, :]
+    learning_set['return'] = learning_set['price_close'] - learning_set['price_open']
+    df2 = df.iloc[split_index:, :]
+    df2 = df2.reset_index(drop=True)
     print("Symulacja...")
-    for i in range(0, 100, 10):
-        pos, a, delta = pfp.create_matrix(df)
+    for i in range(0, 100):
+        pos, a, delta = pfp.create_matrix(learning_set)
         print('{}%'.format(i))
         delta = pfp.change_matrix(pos / a, i / 100, delta)
         predictionmean = predictionmean.append(
-            pfp.predict(delta, prediction_data, df.iloc[-1], i / 100, int(np.ceil(len(prediction_data.index) / 8)), df)[
-                ['price_close', 'time_close']])
+            pfp.predict(delta, df2.copy(), learning_set.iloc[-1].copy(), i / 100, int(np.ceil(len(df2.index) / 8)),
+                        learning_set.copy())[['price_close', 'time_close']])
     predictionmean = predictionmean.groupby('time_close').mean()
-    pos, a, delta = pfp.create_matrix(df)
+
+    pos, a, delta = pfp.create_matrix(learning_set)
     delta = pfp.change_matrix(pos / a, 0.6, delta)
     print("Tworzenie najlepszego modelu...")
-    prediction_data = pfp.predict(delta, prediction_data, df.iloc[-1], 0.6, 7, df)
+    prediction_data = pfp.predict(delta, df2.copy(), learning_set.iloc[-1].copy(), 0.6, 7, learning_set.copy())
 
     plt.figure(figsize=(16, 9))
     plt.plot(prediction_data['time_close'], predictionmean['price_close'], color='blue', alpha=1,
              label='średnia z symulacji')
     plt.plot(prediction_data['time_close'], prediction_data['price_close'], color='orange',
              label='Pojedyncza predykcja')
+
     plt.plot(df['time_close'], df['price_close'], color='black', label='Pobrane dane')
     plt.title("Predykcja kursu BTC - USD")
     plt.xticks(rotation='vertical')
@@ -37,12 +52,8 @@ if __name__ == '__main__':
     plt.legend()
     plt.savefig('prediction.png')
     plt.show()
-
-    print("Statystyki dla 100-krotnej symulacji: ")
-    print("Średnia: {}".format(np.mean(predictionmean['price_close'])))
-    print("Mediana: {}".format(np.median(predictionmean['price_close'])))
-    print("Odchylenie standardowe: {}".format(np.std(predictionmean['price_close'])))
-    print("Statystyki dla pojedynczej symulacji: ")
-    print("Średnia: {}".format(np.mean(prediction_data['price_close'])))
-    print("Mediana: {}".format(np.median(prediction_data['price_close'])))
-    print("Odchylenie standardowe: {}".format(np.std(prediction_data['price_close'])))
+    rmse_sym = np.sqrt(np.mean(((predictionmean['price_close'].values - df2['price_close'].values) ** 2)))
+    rmse_sin = np.sqrt(np.mean(((prediction_data['price_close'].values - df2['price_close'].values) ** 2)))
+    print("Statystyki: ")
+    print("Średni błąd kwadratowy dla pojedynczej sym: {}".format(rmse_sin))
+    print("Średni błąd kwadratowy dla 100 sym: {}".format(rmse_sym))
