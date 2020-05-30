@@ -1,0 +1,16 @@
+1) Na wykresie mniej nasyconym kolorem niebieskim pokazuje się wszystkie 100 symulacji. 
+Nasycony kolor niebieski odzwierciedla rzeczywiste dane. 
+Do wybrania "najlepszego wykresu", czyli tego najbliższego danym rzeczywistym stosuję błąd średniokwadratowy. 
+Symulacja z jego najmniejszą wartością jest uznawana za najlepszą, po czym nanoszona na wykres, pod kolorem czerwonym.
+Wartość MSE dla najlepszej symulacji wyświetlana jest w konsoli.
+Na jej zwycięstwo w teście największy wpływ ma szczęśliwe dobranie wartości zmian.
+Te przecież w każdej z symulacji są losowane spośród zaobserwowanych już w przeszłości. 
+
+2) Naturalnie w zakresie na który pozwalają ograniczenia inuptu, im większy przedział czasowy tym lepiej.
+Wpływa to negatywnie na czas działania programu (dłuższe pobieranie), jednak lepiej odzwierciedla rzeczywistość. 
+W przyjętym przeze mnie modelu wybranie przedziału mniejszego niż tydzień czy dwa jest niemal całkowicie bezsensowne.
+Porównując konkretne dni tygodnia na przestrzeni czasu mając do dyspozycji po jednej czy dwóch wartościach nie otrzymamy zadowalających wyników. 
+Inaczej mówiąc podając taki mały zakres czasowy, lepiej dać dziecku kredkę i poprosić, żeby kawałek dorysowało, oszczędzimy czas, a dziecko będzie miało zabawę.
+Ilość danych w przypadku najlepszej symulacji nie ma wielkiego znaczenia ze względu na losowość przyrostów i spadków.
+Ma jednak łatwy do zaobserwowania już na pierwszy rzut oka wpływ na średnią wartość obserwacji.
+Jest ona o wiele bliższa rzeczywistym wartościom w przypadku większego przedziału czasowego. 
