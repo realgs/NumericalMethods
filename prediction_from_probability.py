@@ -3,61 +3,26 @@ import pandas as pd
 import numpy as np
 import pickle
 import os
-import datetime
 
 
 def download_data(date, end, apikeys=None, peroid='1HRS'):
     if not apikeys:
         apikeys = load_api_keys()
     url = 'https://rest.coinapi.io/v1/ohlcv/BITSTAMP_SPOT_BTC_USD/history?period_id={}&' + \
-          'time_start={}&time_end{}&limit=100000'
-    headers = {'X-CoinAPI-Key': apikeys[0]}
+          'time_start={}&time_end{}&limit=7317'
+    if type(apikeys) == list:
+        headers = {'X-CoinAPI-Key': apikeys[0]}
+    else:
+        headers = {'X-CoinAPI-Key': apikeys}
     response = rq.get(url.format(peroid, date, end), headers=headers)
     if response.status_code != 200:
         apikeys = select_apikey(apikeys)
         return download_data(date, end, apikeys)
     df = pd.DataFrame(response.json())
-    df = df.filter(['time_open', 'time_close', 'price_close'])
+    df = df.filter(['time_open', 'time_close', 'price_close', 'price_open'])
     df['time_open'] = pd.to_datetime(df['time_open'].str.slice(stop=16))
     df['time_close'] = pd.to_datetime(df['time_close'].str.slice(stop=16))
     return df
-
-#
-# def extend_df(df, date, peroid='1HRS'):
-#     if df.iloc[-1]['time_close'].minute != df.iloc[-2]['time_close'].minute:
-#         df.drop(df.tail(1).index, inplace=True)
-#     year, month, day = date.split('-')
-#     year = int(year)
-#     month = int(month)
-#     day = int(day)
-#     if peroid == '1HRS':
-#         time = int((datetime.datetime.today() - datetime.datetime(year, month, day)).total_seconds() // 3600) - 1
-#     else:
-#         time = (datetime.datetime.today() - datetime.datetime(year, month, day)).days + 1
-#     prediction_data = pd.DataFrame(columns=df.columns)
-#
-#     cols = ['time_period_start', 'time_period_end', 'time_open', 'time_close']
-#     temp = df.iloc[-1][cols]
-#     for i in range(time):
-#         if peroid == '1HRS':
-#             temp += datetime.timedelta(hours=1)
-#         else:
-#             temp += datetime.timedelta(days=1)
-#         prediction_data = prediction_data.append(temp, ignore_index=True)
-#     prediction_data = prediction_data.replace({pd.NaT: 0})
-#     prediction_data['price_open'] = prediction_data['price_open'].astype(df['price_open'].dtype)
-#     prediction_data['price_high'] = prediction_data['price_high'].astype(df['price_high'].dtype)
-#     prediction_data['price_low'] = prediction_data['price_low'].astype(df['price_low'].dtype)
-#     prediction_data['price_close'] = prediction_data['price_close'].astype(df['price_close'].dtype)
-#     prediction_data['volume_traded'] = prediction_data['volume_traded'].astype(df['volume_traded'].dtype)
-#     prediction_data['trades_count'] = prediction_data['trades_count'].astype(df['trades_count'].dtype)
-#     prediction_data['time_period_start'] = pd.to_datetime(prediction_data['time_period_start'])
-#     prediction_data['time_period_end'] = pd.to_datetime(prediction_data['time_period_end'])
-#     prediction_data['time_open'] = pd.to_datetime(prediction_data['time_open'])
-#     prediction_data['time_close'] = pd.to_datetime(prediction_data['time_close'])
-#     df['return'] = df['price_close'] - df['price_open']
-#
-#     return df, prediction_data
 
 
 def load_api_keys():
@@ -91,21 +56,6 @@ def select_apikey(apikeys):
     else:
         working_keys.extend(limited_keys)  # dodaj klucze, które wyczerpały limit na koniec
     return working_keys
-
-
-def check_date(date):
-    try:
-        year, month, day = date.split('-')
-        year = int(year)
-        month = int(month)
-        day = int(day)
-        datetime.datetime(year, month, day)
-    except ValueError:
-        return False
-    today = str(datetime.date.today()).split('-')
-    if list(map(int, today)) < [year, month, day]:
-        return False
-    return True
 
 
 def change_matrix(probability, alpha, change):
