@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import prediction_from_probability as pfp
 import numpy as np
 import datetime
-import os
 import warnings
 
 warnings.filterwarnings("ignore")
