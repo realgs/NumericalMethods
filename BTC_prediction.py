@@ -149,6 +149,11 @@ def main():
     else:
         plt.xlim(data.iloc[0]['date'], datetime.date.today() + datetime.timedelta(days=7))
 
+    print('\nStatystyki symulacji:')
+    print('Średnia: ', np.mean(avg))
+    print('Mediana:', np.median(avg))
+    print('Odchylenie standardowe:', np.std(avg))
+
     plt.xlabel('Date')
     plt.ylabel('Price [USD]')
     plt.title('BTC price with 7-days prediction')
