@@ -18,7 +18,7 @@ if __name__ == '__main__':
     df, prediction_data = pfp.extend_df(df, date, peroid='1HRS')
     predictionmean = pd.DataFrame(columns=['price_close', 'time_close'])
     print("Symulacja...")
-    for i in range(0,100,10):
+    for i in range(0,100):
         pos, a, delta = pfp.create_matrix(df)
         print('{}%'.format(i))
         delta = pfp.change_matrix(pos / a, i / 100, delta)
