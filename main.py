@@ -20,12 +20,12 @@ if __name__ == '__main__':
     df2 = df.iloc[split_index:, :]
     df2 = df2.reset_index(drop=True)
     print("Symulacja...")
-    for i in range(0, 100):
+    for i in range(0, 50):
         pos, a, delta = pfp.create_matrix(learning_set)
-        print('{}%'.format(i))
-        delta = pfp.change_matrix(pos / a, i / 100, delta)
+        print('{}%'.format((i + 1) * 100 / 50))
+        delta = pfp.change_matrix(pos / a, 0.6, delta)
         predictionmean = predictionmean.append(
-            pfp.predict(delta, df2.copy(), learning_set.iloc[-1].copy(), i / 100, int(np.ceil(len(df2.index) / 8)),
+            pfp.predict(delta, df2.copy(), learning_set.iloc[-1].copy(), 0.6, int(np.ceil(len(df2.index) / 30)),
                         learning_set.copy())[['price_close', 'time_close']])
     predictionmean = predictionmean.groupby('time_close').mean()
 
