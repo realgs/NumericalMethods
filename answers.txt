@@ -1,0 +1,3 @@
+1. Na oko bliższy rzeczywistemu jest wykres dla danych teraźniejszych. Modelowanie nie jest tak dokładne jak np. w zadaniu z wolumenem, ponieważ wykres cen jest dużo mniej różnorodny. W wolumenie wachania były ogromne co powoduje lepsze uczenie modelu MOVING AVERAGE.
+2. Im okres dluższy tym symulacja powinna być dokładniejsza, ponieważ model ma więcej danych do uczenia. Oprócz tego model wykrozystuje okno czasowe. Im okno mniejsze tym dokładniejsze odwzorowanie rzeczywistości przez model. 
+
