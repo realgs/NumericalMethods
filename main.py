@@ -3,37 +3,6 @@ import matplotlib.pyplot as plt
 import prediction_from_probability as pfp
 import numpy as np
 
-# import RecurrentNeuralNetwork as RNN
-# import datetime
-# import os
-# from keras.models import load_model
-
-
-# def rnn_model(date):
-#     df = pfp.download_data('2011-01-01', peroid='1DAY')
-#     df = df[['price_close', 'time_close']]
-#     df['time_close'] = df['time_close'].dt.date
-#     df = df.groupby('time_close').mean()['price_close']
-#     year, month, day = date.split('-')
-#     year = int(year)
-#     month = int(month)
-#     day = int(day)
-#     time = (datetime.datetime.today() - datetime.datetime(year, month, day)).days + 1
-#     if os.path.exists('btc_prediction_model.h5'):
-#         model = load_model('btc_prediction_model.h5')
-#     else:
-#         price_matrix = RNN.price_martix(df, length=time)
-#         price_matrix = RNN.normalize_data(price_matrix)
-#         row, X_train, Y_train, X_test, Y_test = RNN.split(price_matrix)
-#         model = RNN.set_model(time, X_train, Y_train)
-#     pretict_data = RNN.create_df(X_train.index[-1], time)
-#     price = RNN.price_martix(pretict_data, time)
-#     X_test = RNN.normalize_data(price)
-#     X_test = np.array(X_test)
-#     X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
-#     preds = model.predict(X_test,batch_size=3)
-#     return preds
-
 
 if __name__ == '__main__':
     date = input("Podaj date w formacie YYYY-MM-DD (mogą być od 2011 - ale liczenie zajmie wieki - najlepiej wziąć od początku roku): ")
