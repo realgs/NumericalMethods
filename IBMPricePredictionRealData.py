@@ -35,7 +35,6 @@ def random_date():
     return earliest + datetime.timedelta(seconds = random_second)
 
 def sim (a):
-    #najpierw sprawdzam czy data nie jest w czasie weekendu kiedy nie ma notowań
     if a not in dates: 
         for i in range(2):
             dd = (int(a[8:10]))
@@ -48,12 +47,11 @@ def sim (a):
             return 
 
     N = dates.index(a)
-
-    a,b = regresion(prices[N:len(dates)-5], prices[N+5:])   #wpływ cen z zeszłego tygodnia na ceny z tygodnia nastepnego (5 dni roboczch)
-
+    
+    a,b = regresion(prices[N:len(dates)-5], prices[N+5:])   
     predicted_prices = []
     
-    for x in prices[len(dates)-522:len(dates)-261]: #261 to ok. liczba rekordów z poprzedniego roku, trochę się psuje przez weekendy
+    for x in prices[N-p:N]: 
         predicted_prices.append(a*x+b) 
     return predicted_prices
 
@@ -69,11 +67,12 @@ for i in range(len(dates)):
 
 keys = (data[dates[0]].keys())
 
-a = '2012-12-12'#input("Podaj date w formacie rrrr-mm-dd (max 20 lat w stecz):")
+
+a = '2019-05-30'
+
+N = dates.index(a)
+p = len(prices) - N
 predicted_prices = sim(a)
-
-
-
 
 avg_pred = predicted_prices.copy()
 for i in range(99):
@@ -86,8 +85,18 @@ for i in range(99):
 for i in range(len(avg_pred)):
     avg_pred[i] = avg_pred[i]/100
 
-plt.plot(prices[len(dates)-261:] + predicted_prices)
-plt.plot(prices[len(dates)-261:] + avg_pred)
-plt.plot(prices[len(dates)-261:])
-plt.legend(['prediction','average prediction after 100 simulations', 'last yera'])
-plt.show()   
+plt.plot(prices[N:])
+plt.plot(predicted_prices)
+plt.plot(avg_pred)
+plt.legend(['real' , 'predicted', 'average prediction'])
+plt.show()
+
+dif = (np.array(prices[N:]) - np.array(predicted_prices))
+u = 2
+dif = np.power(dif, u)
+print(sum(dif))
+
+dif = (np.array(prices[N:]) - np.array(avg_pred))
+u = 2
+dif = np.power(dif, u)
+print(sum(dif))
