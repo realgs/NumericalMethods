@@ -11,12 +11,9 @@ warnings.filterwarnings("ignore")
 if __name__ == '__main__':
     date = '2019-05-01'
     end = '2020-03-01'
-    if os.path.exists("data.json"):
-        df = pd.read_json('data.json', orient='columns', convert_dates=['time_close', 'time_open'])
 
-    else:
-        df = pfp.download_data(date, end, peroid='1HRS')
-        df.to_json('data.json', orient='columns')
+    df = pfp.download_data(date, end, peroid='1HRS')
+
     predictionmean = pd.DataFrame(columns=['price_close', 'time_close'])
     split_index = df.loc[df['time_open'] == datetime.datetime(2019, 10, 1)].index[0]
     learning_set = df.iloc[:split_index, :]
