@@ -1,0 +1,47 @@
+Odpowiedzi na pytania zostału opracowane na podsawie badania zachowań modelu na zakresie 01.01.2018-01.01.2020
+
+1)Badane rozbieżności (pomiędzy badanymi rzeczywistymi a danymi przywidzianymi przez model) za pomocą błędu średniokwadratowego 
+okazały się mniejsze w przypadku wielkrotnej symulacji --> wielkrotna symulacja jest bliższa rzeczywistośći. Jest to wynikiem
+badania przez model różnych scenariuszy zmian wartości ceny, dzięki czemu możliwe było znalezienie optymalnej wartości 
+ceny dla każdej przywidywanej danej.
+
+Przykładowe dane:
+.............BŁĘDY SYMULACJI............
+Pojedyncza symulacja     242219.3 
+Wielokrotna symulacja    146854.9
+
+2)Ogólnie większa ilość danych uczących (dłuższy okres symulacji) powinnien wpływać na większą dokładność przewidywanego modelu.
+W przypadku przedstawionego modelu zmniejszenie okresu symulacji wpłynęło na większe odzwierciedlenie rzeczywistości przez 
+przewidywane dane.
+
+Przykładowe dane:
+Zakres 1 rok
+.............BŁĘDY SYMULACJI............
+Pojedyncza symulacja     31366724.5 
+Wielokrotna symulacja    29295303.02
+
+Zakres 9 miesięcy
+.............BŁĘDY SYMULACJI............
+Pojedyncza symulacja     31340320.41 
+Wielokrotna symulacja    29824177.73
+
+Zakres 6 miesięcy
+.............BŁĘDY SYMULACJI............
+Pojedyncza symulacja     14132725.07 
+Wielokrotna symulacja    13770412.95
+
+Zakres 3 miesięcy
+.............BŁĘDY SYMULACJI............
+Pojedyncza symulacja     255092.12 
+Wielokrotna symulacja    177953.53
+
+Zakres 2 miesięcy
+.............BŁĘDY SYMULACJI............
+Pojedyncza symulacja     291324.15 
+Wielokrotna symulacja    118189.34
+
+Zakres 2 tygodni
+.............BŁĘDY SYMULACJI............
+Pojedyncza symulacja     56456.74 
+Wielokrotna symulacja    74741.03
+
