@@ -20,7 +20,7 @@ def model(crypto):
     prices = []
 
     for item in crypto:
-        prices.append(item['volume'])
+        prices.append(item['close'])
 
     window_size = 3
     numbers_series = pd.Series(prices)
