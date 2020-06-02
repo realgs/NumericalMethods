@@ -2,6 +2,7 @@ import requests
 import time
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 
 def get_data(crypto):
@@ -25,52 +26,29 @@ def to_period(period):
     return prices
 
 
-def moving_avg(data):
-    window_size = 15
+def hist_pred(data):
+    window_size = 3
     numbers_series = pd.Series(data)
-    windows = numbers_series.rolling(window_size)
-    moving_averages = windows.mean()
+    train = [numbers_series[i] for i in range(window_size)]
+    test = [numbers_series[i] for i in range(window_size, len(numbers_series))]
+    predictions = list()
 
-    moving_averages_list = moving_averages.tolist()
-    without_nans = moving_averages_list[window_size - 1:]
+    for j in range(len(test)):
+        length = len(train)
+        mean = np.mean([train[i] for i in range(length - window_size, length)])
+        obs = test[j]
+        predictions.append(mean)
+        train.append(obs)
 
-    return without_nans
-
-
-def sim(price):
-    size = 100
-    simulated = []
-
-    for i in range(size):
-        simulation_data = moving_avg(price)
-        simulated.append(simulation_data)
-
-    result = []
-
-    for i in range(len(simulated[0])):
-        values = []
-
-        for j in range(len(simulated)):
-            values.append(simulated[j][i])
-
-        average = sum(values) / len(values)
-        result.append(average)
-
-    return result
+    return predictions
 
 
-def plots(price, one, avg, title):
-    plt.figure(figsize=(18, 8))
-    plt.subplot(2, 2, 1)
-    plt.plot(price, '-m')
-    plt.title("Price")
-    plt.subplot(2, 2, 2)
-    plt.plot(one, '-g')
-    plt.title("One simulation")
-    plt.subplot(2, 2, 3)
-    plt.plot(avg, '-b')
-    plt.title("Avg simulation")
-    plt.suptitle(title, fontsize=26)
+def plots(price, prediction, title):
+    plt.figure(figsize=(15, 5))
+    plt.plot(price, label="Crypto")
+    plt.plot(prediction, label='Simulation')
+    plt.legend()
+    plt.title(title, fontsize=24)
     plt.show()
 
 
@@ -85,13 +63,12 @@ if name in ["ETC", "DASH", "XMR"]:
     past_price = to_period(past)
     present_price = to_period(present)
 
-    one_simulation_past = moving_avg(past_price)
-    one_simulation_present = moving_avg(present_price)
+    prediction = hist_pred(past_price)
 
-    avg_simulation_past = sim(past_price)
-    avg_simulation_present = sim(present_price)
+    predict_future = hist_pred(prediction)
 
-    plots(past_price, one_simulation_past, avg_simulation_past, "PAST")
-    plots(present_price, one_simulation_present, avg_simulation_present, "PRESENT")
+    plots(past_price, prediction, "PAST")
+    plots(present_price, predict_future, "FUTURE")
+
 else:
     print("Wrong input")

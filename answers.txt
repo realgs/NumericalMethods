@@ -1,3 +1,5 @@
-1. Na oko bliższy rzeczywistemu jest wykres dla danych teraźniejszych. Modelowanie nie jest tak dokładne jak np. w zadaniu z wolumenem, ponieważ wykres cen jest dużo mniej różnorodny. W wolumenie wachania były ogromne co powoduje lepsze uczenie modelu MOVING AVERAGE.
-2. Im okres dluższy tym symulacja powinna być dokładniejsza, ponieważ model ma więcej danych do uczenia. Oprócz tego model wykrozystuje okno czasowe. Im okno mniejsze tym dokładniejsze odwzorowanie rzeczywistości przez model. 
-
+1. Bliższy rzeczywsitemu okazał się wykres z przeszłości. Jest to spowodowane niedokładnością modelu i stosunkowo niewielką próbką danych (ok. 200 pozycji).
+Dla danych teraźniejszych model nie pokrywa się w pełni. Może być to również spowodowane dużą różnicą w okresach symulacji (rok kalendarzowy). 
+2. Im okres dluższy tym symulacja powinna być dokładniejsza, ponieważ model ma więcej danych do nauki. 
+W moim przypadku mocne zwiększenie danych do uczenia skutkuje podwyższeniem dokładności modelu.
+Opórcz tego w przypadku MOVING AVERAGE wielkość okna ma znaczący wpływ na dokładność modelu. Im okno mniejsze tym model dokładniej przewiduje. 
