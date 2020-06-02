@@ -1,9 +1,9 @@
 import requests
 import datetime
 import time
-import numpy as np
-import matplotlib.pyplot as plt
 import statistics
+import pandas as pd
+import matplotlib.pyplot as plt
 
 
 def get_data(crypto):
@@ -17,31 +17,23 @@ def get_data(crypto):
 
 
 def model(crypto):
-    times = []
     prices = []
+
     for item in crypto:
-        times.append(datetime.datetime.fromtimestamp(int(item["date"])).strftime("%Y-%m-%d %H:%M:%S"))
-        prices.append(item['close'])
+        prices.append(item['volume'])
 
-    model_time = times.copy()
-    model_time.append('00:00')
+    window_size = 3
+    numbers_series = pd.Series(prices)
+    windows = numbers_series.rolling(window_size)
+    moving_averages = windows.mean()
 
-    exp_smoothing = np.zeros(len(prices) + 1)
-    exp_smoothing[0] = prices[0]
-    exp_smoothing[1] = prices[1]
-
-    alpha = float(input("Enter the alpha value [0, 1]. The higher the better: "))
-
-    for i in range(2, len(model_time)):
-        exp_smoothing[i] = alpha * prices[i - 1] + (1 - alpha) * exp_smoothing[i - 1]
+    size = int(len(prices) * 0.6)
 
     plt.figure(figsize=(15, 5))
-    plt.plot(times, prices, '-ro', label='Crypto')
-    plt.plot(model_time, exp_smoothing, '-go', label="Prediction")
-    plt.xticks(times, rotation='vertical')
-    plt.ylabel("Prices")
+    plt.plot(prices[:size], label='Crypto')
+    plt.plot(moving_averages[size:], label='Simulation')
     plt.legend()
-    plt.title("Price prediction")
+    plt.title("Prediction")
     plt.show()
 
 
@@ -71,6 +63,16 @@ def stats(crypto):
     print("Statistics for inclines and declines respectively:\n"
           "Means: {}, {}\n"
           "Medians: {}, {}\n"
-          "Standard deviation: {}, {}".format(round(growth_mean, 5), round(decline_mean, 5),
-                                              round(growth_median, 5), round(decline_median, 5),
-                                              round(st_dev_growth, 5), round(st_dev_decline, 5)))
+          "Standard deviation: {}, {}".format(growth_mean, decline_mean,
+                                              growth_median, decline_median,
+                                              st_dev_growth, st_dev_decline))
+
+
+name = input("Choose your crypto (ETC, DASH, XMR): ").upper()
+
+if name in ["ETC", "DASH", "XMR"]:
+    crypto = get_data(name)
+    model(crypto)
+    stats(crypto)
+else:
+    print("Wrong input")
