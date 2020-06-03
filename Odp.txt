@@ -1,0 +1,5 @@
+1)W stworzonym modelu symulacji, symulacja pojedyncza bedzie tak samo zblizona do rzeczywistoci
+ jak po usrednieniu 100 symulacji, poniewaz od poczatku dziala na podstawie usrednien (przyjete wzory matematyczne).
+2) Im wieksza posiadamy baze startowa, tym dokładniejsze powinny byc prognozy.
+ W modelu korzystam z wyliczania srednich wartości procentowych zmian i zestawiam je z aktualnym kursem,
+ by wyliczyc jak się zmieni w przyszlosci. 
