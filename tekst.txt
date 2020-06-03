@@ -1,0 +1,2 @@
+W moim modelu po przeprowadzeniu 100 symulacji i uśrednieniu ich, wynik będzie taki sam, jak po przeprowadzeniu 1 symulacji. Wynika to z zastosowanego wzoru na wyliczenie przyszłej wartości.
+Im więcej symulacji przeprowadzamy, tym przewidywane wyniki są dokładniejsze. W modelu wykorzystuje średnią procentową zmianę ceny, na której podstawie określam, o ile zmieni się przyszła cena.
