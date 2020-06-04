@@ -3,4 +3,4 @@ więcej danych (100 symulacji). Zmierzone to zostało przy pomocy sumy różnic
 między predykcją a wartością realną podniesionych do kwadraty. 
 
 2) im dłuższy okres symulacji tym predykcja powinna być mniej dokładna, 
-ponieważ wdłuższym okresie mamy do czynienia z większą ilością zmiennych
+ponieważ nakładają się na nią błedy z poprzednich predykcji
