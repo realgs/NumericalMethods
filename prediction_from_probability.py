@@ -4,7 +4,6 @@ import numpy as np
 import pickle
 import os
 import datetime
-import matplotlib.pyplot as plt
 
 
 def download_data(date, apikeys=None, peroid='1HRS'):
@@ -92,6 +91,8 @@ def select_apikey(apikeys):
             select_apikey(apikeys)
     else:
         working_keys.extend(limited_keys)  # dodaj klucze, które wyczerpały limit na koniec
+        with open('apikeys.pkl', 'wb') as file:
+            pickle.dump(working_keys, file)
     return working_keys
 
 
