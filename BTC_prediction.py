@@ -34,24 +34,17 @@ def complete_data():
     return data
 
 
-def add_daily_price_and_change():
+def final_data():
     data = complete_data()
     data = data[data['date'] > start]
     columns = data.columns.difference(['date'])
     data[columns] = data[columns].astype(float)
     data_daily = data.resample('d', on='date').mean().dropna(how='all')
     change = data_daily['price'].pct_change().fillna(0)
-    data_daily = data_daily.assign(change=change.values)
-    data_daily = data_daily.reset_index()
+    data_daily = data_daily.assign(change=change.values).reset_index()
+    data_daily['day of week'] = data_daily['date'].dt.day_name()
 
     return data_daily
-
-
-def final_data():
-    data = add_daily_price_and_change()
-    data['day of week'] = data['date'].dt.day_name()
-
-    return data
 
 
 def day_probability(day_name, data):
@@ -135,9 +128,9 @@ def main():
         plt.plot(prediction(data)[0], prediction(data)[1], 'lightskyblue')
         predictions.append(prediction(data)[1])
 
-    pred = np.array(predictions)
-    avg = np.mean(pred, axis=0)
-    plt.plot(prediction(data)[0], avg, 'blue')
+    predictions_arr = np.array(predictions)
+    average_prediction = np.mean(predictions_arr, axis=0)
+    plt.plot(prediction(data)[0], average_prediction, 'blue')
     plt.plot(data['date'], data['price'], 'blue')
 
     if data['date'].shape[0] > 21:
@@ -150,9 +143,9 @@ def main():
         plt.xlim(data.iloc[0]['date'], datetime.date.today() + datetime.timedelta(days=7))
 
     print('\nStatystyki symulacji:')
-    print('Średnia: ', np.mean(avg))
-    print('Mediana:', np.median(avg))
-    print('Odchylenie standardowe:', np.std(avg))
+    print('Średnia: ', np.mean(average_prediction))
+    print('Mediana:', np.median(average_prediction))
+    print('Odchylenie standardowe:', np.std(average_prediction))
 
     plt.xlabel('Date')
     plt.ylabel('Price [USD]')
