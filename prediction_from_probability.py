@@ -55,6 +55,8 @@ def select_apikey(apikeys):
             select_apikey(apikeys)
     else:
         working_keys.extend(limited_keys)  # dodaj klucze, które wyczerpały limit na koniec
+        with open('apikeys.pkl', 'wb') as file:
+            pickle.dump(apikeys, file)
     return working_keys
 
 
