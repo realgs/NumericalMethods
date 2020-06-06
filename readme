@@ -1,0 +1,3 @@
+1) W przypadku Moving Average nie ma różnicy pomiędzy jedną symulacją a 100-ma symulacjami, ponieważ obliczana jest średnia.
+
+2) Im dłuższy okres predykcji cen tym gorsza skuteczność Moving Average. Najlepiej ten model sprawdza się na krótszych okresach.
