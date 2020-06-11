@@ -1,0 +1,8 @@
+Mini-program Wallet.py jest wirtualnym odzwierciedleniem portfela. Swoje zasoby przechowuje w pliku WALLET.xlsx. 
+Użytkownik ma możliwość dodawania oraz usuwania walut. 
+Może to zrobić w sposób nieelegancki dodając kolejny rekord przy pomocy „Excela” lub odpalić program i postąpić zgodnie z instrukcjami wybierając odpowiednie opcje. 
+Program umożliwia obliczenie wartości całego portfela jak i poszczególnych jego składowych. 
+Możliwe jest to, analogicznie jak dodawanie i odejmowanie walut, po wybraniu w pythonowej konsoli odpowiedniej opcji. 
+Program zwraca także różnicę pomiędzy aktualną wartością portfela, a tą uzyskaną przy poprzednim sprawdzeniu 
+(pobiera ją z pliku previous_result.txt i tam też zapisuje aktualny wynik, aby w przyszłości móc powtórzyć procedurę). 
+Wszystkie niezbędne do działania programu dane zatem znajdują się w dwóch załączonych plikach oraz są pobierane w postaci inuptu użytkownika z konsoli. 
