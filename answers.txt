@@ -1,0 +1,12 @@
+1) W przykładowej symulajci lepszym modelem okazał się być model pojedynczej symulacji. Błędy bredykcji były liczone
+na podstawie błędu średniokwadratowego. Błąd ten był mniejszy dla uśrednionej symulacji. Mój model opera się na parametrze
+alpha (ustawiony na 0.6)  - minimalna wartość prawdopodobieństwa. Jeżeli obliczone prawdopodobieństwo wystąpienia zdażenia
+(wzrostu) przez model jest większe od parametru lub  prawdopodobieństwo spadku jest większe od alpha, to losujemy wartość
+procentową spadku lub wzrostu (ze wszystkich spadków / wzrostów z danego dnia tygodnia oraz godziny).
+Zauważamy, że przy uśrednionym wyniku natknęliśmy się na pewną okresowość, lecz mimo tego błąd okazał się być mniejszy.
+
+2) Im więcej model ma danych uczących tym lepszy będzie wynik, lecz wielkość ciągu uczącego przekłada się na czas potrzebny
+wyuczenia modelu a następnie jego predykcji. Możemy jasno stwierdzić, że sugerując się predykcjami stworzonymi przez model
+dużo byśmy stracili. W moim przypadku zakres danych uczących to 5 miesięcy - jest to długi okres, uwzględniając zmienność i
+niestabilność ceny BTC, wystarczający. Istnieją modele oparte o ML (LSTM RNN), które o wiele lepiej radzą sobie z predykcją cen,
+jednak są one o wiele bardziej skomplikowane.
